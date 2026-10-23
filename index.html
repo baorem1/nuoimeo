@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏠 Nhà Mèo</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/cat-card.css">
+  <link rel="stylesheet" href="css/effects.css">
+  <link rel="stylesheet" href="css/lineage.css">
+</head>
+<body>
+
+  <!-- NHẠC NỀN (Tự động lặp lại) -->
+  <!-- Nhớ đổi tên file nhạc trong thư mục audio thành nhac_nen.mp3 -->
+  <audio id="bg-music" loop>
+    <source src="audio/nhac_nen.mp3" type="audio/mpeg">
+  </audio>
+  
+  <script>
+    // Trình duyệt chặn tự động phát, nên phải chờ người chơi click
+    document.body.addEventListener('click', function() {
+      const music = document.getElementById('bg-music');
+      if (music.paused) {
+        music.volume = 0.3; // Âm lượng 30%
+        music.play().catch(e => console.log("Trình duyệt chặn phát nhạc:", e));
+      }
+    }, { once: true }); // Chỉ kích hoạt 1 lần duy nhất
+  </script>
+
+  <!-- Popup Chào mừng -->
+  <div id="welcome-modal" class="modal">
+    <div class="modal-content">
+      <h1>🐱 Chào mừng đến Nhà Mèo!</h1>
+      <p>Bạn là tân thủ, hãy nhận một bé mèo dễ thương nhé!</p>
+      <button id="btn-adopt" class="btn-primary">Nhận nuôi mèo 🎁</button>
+    </div>
+  </div>
+
+  <!-- Popup Ghép đôi -->
+  <div id="breed-modal" class="modal hidden">
+    <div class="modal-content">
+      <h1>💕 Ghép đôi</h1>
+      <p id="breed-text">Chọn một bé mèo khác giới để ghép đôi</p>
+      <div id="breed-list" class="breed-list"></div>
+      <button id="btn-breed-cancel" class="btn-secondary">Hủy</button>
+    </div>
+  </div>
+
+  <!-- Popup Kết quả sinh sản -->
+  <div id="result-modal" class="modal hidden">
+    <div class="modal-content">
+      <h1 id="result-title">🎉 Chúc mừng!</h1>
+      <div id="result-body"></div>
+      <button id="btn-result-close" class="btn-primary">Tuyệt vời!</button>
+    </div>
+  </div>
+
+  <!-- Popup Bộ sưu tập -->
+  <div id="collection-modal" class="modal hidden">
+    <div class="modal-content">
+      <h1>📖 Bộ sưu tập</h1>
+      <div id="collection-body"></div>
+      <button id="btn-collection-close" class="btn-secondary">Đóng</button>
+    </div>
+  </div>
+
+  <!-- Popup Lên cấp -->
+  <div id="levelup-modal" class="modal hidden">
+    <div class="modal-content">
+      <h1>✨ Lên cấp!</h1>
+      <div id="levelup-body"></div>
+      <button id="btn-levelup-close" class="btn-primary">Tuyệt!</button>
+    </div>
+  </div>
+
+  <!-- POPUP ĐIỂM DANH -->
+  <div id="daily-modal" class="modal hidden">
+    <div class="modal-content" style="text-align: center;">
+      <h1>📅 Điểm danh hàng ngày</h1>
+      <div id="daily-calendar" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 20px;"></div>
+      <button id="btn-daily-claim" class="btn-primary" style="width: 100%;">Nhận quà 🎁</button>
+      <button id="btn-daily-close" class="btn-secondary" style="width: 100%; margin-top: 10px;">Đóng</button>
+    </div>
+  </div>
+
+  <!-- POPUP ĐẤU GIÁ MÈO -->
+  <div id="auction-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 500px; text-align: left;">
+      <h1 style="text-align:center;">⚖️ Đấu giá mèo</h1>
+      <p style="text-align:center;color:#777;">Người mua giả lập sẽ đưa ra một giá ngẫu nhiên sau 1 phút. Giá có thể thấp hoặc cao hơn giá bán thông thường.</p>
+      <div id="auction-list" class="breed-list" style="max-height: 360px; overflow-y: auto; margin: 16px 0;"></div>
+      <button id="btn-auction-close" class="btn-secondary" style="width:100%;">Đóng</button>
+    </div>
+  </div>
+
+  <!-- POPUP THÁM HIỂM -->
+  <div id="expedition-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 620px; text-align: left;">
+      <h1 style="text-align:center;">🧭 Thám hiểm mèo</h1>
+      <p style="text-align:center;color:#777;">Chọn chuyến đi cho mèo. Mèo sẽ tiếp tục lớn lên khi bạn offline và nhận xu khi trở về.</p>
+      <div id="expedition-list" class="breed-list" style="max-height: 55vh; overflow-y: auto;"></div>
+      <button id="btn-expedition-close" class="btn-secondary" style="width:100%;">Đóng</button>
+    </div>
+  </div>
+
+  <!-- TÚI ĐỒ -->
+  <div id="inventory-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 560px; text-align: left;">
+      <h1 style="text-align:center;">🎒 Túi đồ</h1>
+      <p style="text-align:center;color:#777;">Mở rương, trang bị đồ vĩnh viễn hoặc chọn mèo dùng vật phẩm. Mèo đang thám hiểm không thể dùng hay trang bị đồ.</p>
+      <div id="inventory-list" class="breed-list" style="max-height: 55vh; overflow-y: auto;"></div>
+      <button id="btn-inventory-close" class="btn-secondary" style="width:100%;">Đóng</button>
+    </div>
+  </div>
+
+  <!-- POPUP CỬA HÀNG (MUA & BÁN) -->
+  <div id="shop-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 600px; text-align: left;">
+      
+      <!-- Tab chuyển đổi -->
+      <div style="display: flex; border-bottom: 2px solid #eee; margin-bottom: 16px;">
+        <button id="tab-buy" class="btn-secondary" style="flex: 1; border-radius: 12px 12px 0 0; font-weight: bold; background: #fff0f5; color: #d64b8e;">🛒 Mua Mèo</button>
+        <button id="tab-sell" class="btn-secondary" style="flex: 1; border-radius: 12px 12px 0 0; font-weight: bold;">⚖️ Bán Mèo</button>
+        <button id="tab-items" class="btn-secondary" style="flex: 1; border-radius: 12px 12px 0 0; font-weight: bold;">🧴 Vật phẩm</button>
+      </div>
+
+      <!-- Nội dung Tab Mua -->
+      <div id="shop-buy-content">
+        <p style="text-align: center; color: #666; margin-bottom: 16px;">Mua một bé mèo ngẫu nhiên với giá <b>300 xu</b>.</p>
+        <div style="text-align: center; padding: 20px; background: #fafafa; border-radius: 12px;">
+          <div style="font-size: 64px; margin-bottom: 10px;">🎁</div>
+          <p style="font-size: 0.9em; color: #888; margin-bottom: 16px;">Cơ hội nhận các dòng mèo từ Common đến Secret!</p>
+          <button id="btn-buy-action" class="btn-primary" style="width: 100%;">Mua ngay (300 xu)</button>
+        </div>
+      </div>
+
+      <!-- Nội dung Tab Bán -->
+      <div id="shop-sell-content" class="hidden">
+        <div style="display: flex; gap: 10px; margin-bottom: 16px; justify-content: center;">
+          <button class="btn-secondary" onclick="toggleSelectAll(true)">Chọn tất cả</button>
+          <button class="btn-secondary" onclick="toggleSelectAll(false)">Bỏ chọn</button>
+        </div>
+        <div id="bulk-sell-list" class="breed-list" style="max-height: 300px; margin-bottom: 16px;"></div>
+        <div style="text-align: center; margin-bottom: 16px; font-weight: bold; font-size: 1.2em; color: #c98c00;">
+          Tổng thu: <span id="bulk-total-money">0</span> xu
+        </div>
+        <button id="btn-bulk-confirm" class="btn-primary" style="width: 100%; background: #ff4444;">Bán tháo</button>
+      </div>
+
+      <div id="shop-items-content" class="hidden">
+        <p style="text-align:center;color:#777;">Mua đồ dùng cho mèo. Vật phẩm được lưu trong túi của bạn.</p>
+        <div id="shop-items-list" class="breed-list" style="max-height: 300px;"></div>
+      </div>
+
+      <button id="btn-shop-close" class="btn-secondary" style="width: 100%; margin-top: 12px;">Đóng</button>
+    </div>
+  </div>
+
+  <!-- Popup Xác Nhận Xịn Xò -->
+  <div id="confirm-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 400px;">
+      <h1 id="confirm-title" style="font-size: 1.4em;">Xác nhận</h1>
+      <p id="confirm-message" style="font-size: 1em; margin-bottom: 24px;">Bạn có chắc không?</p>
+      
+      <div id="confirm-input-wrap" class="hidden" style="margin-bottom: 20px;">
+        <input type="text" id="confirm-input" placeholder="Gõ chữ xác nhận..." style="width: 100%; padding: 10px; border-radius: 10px; border: 2px solid #ffd1e8; text-align: center; font-size: 1em; outline: none;">
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button id="btn-confirm-cancel" class="btn-secondary" style="flex: 1;">Hủy</button>
+        <button id="btn-confirm-ok" class="btn-primary" style="flex: 1;">Đồng ý</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME CHÍNH -->
+  <div id="game" class="hidden">
+       <header>
+      <button id="btn-daily" class="btn-icon btn-daily" title="Điểm danh hàng ngày">
+        📅 <span id="daily-badge" class="daily-badge">!</span>
+      </button>
+      
+      <div class="money">💰 <span id="money">500</span> xu</div>
+
+            <div class="header-right">
+        <!-- Nút Thành tựu -->
+        <button id="btn-achievement" class="btn-icon" title="Thành tựu">
+          <img src="img/thanhtuu.png" style="width: 22px; height: 22px; object-fit: contain;">
+        </button>
+        <button id="btn-collection" class="btn-icon" title="Bộ sưu tập">📖</button>
+        <button id="btn-expedition" class="btn-icon" title="Thám hiểm mèo">🧭</button>
+        <button id="btn-inventory" class="btn-icon" title="Túi đồ">🎒</button>
+        <button id="btn-auction" class="btn-icon" title="Đấu giá mèo">⚖️</button>
+        <button id="btn-shop" class="btn-icon" title="Cửa hàng">🛒</button>
+        <button id="btn-reset" class="btn-icon btn-danger-icon" title="Xóa dữ liệu">🗑️</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="cat-list" class="cat-list"></div>
+    </main>
+
+    <footer>
+      <p>© 2026 DEV Lý Tiểu Bảo. Bản quyền thuộc về tác giả.</p>
+    </footer>
+  </div>
+  
+  <!-- POPUP THÀNH TỰU -->
+  <div id="achievement-modal" class="modal hidden">
+    <div class="modal-content" style="max-width: 500px; text-align: left;">
+      <h1 style="text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <img src="img/thanhtuu.png" style="width: 32px; height: 32px;"> 
+        Thành tựu
+      </h1>
+      <p style="text-align: center; color: #888; font-size: 0.9em; margin-bottom: 16px;">Cày cuốc chăm chỉ để nhận thưởng lớn!</p>
+      
+      <div id="achievement-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 5px;">
+        <!-- Danh sách thành tựu sẽ được JS đổ vào đây -->
+      </div>
+
+      <button id="btn-achievement-close" class="btn-secondary" style="width: 100%; margin-top: 16px;">Đóng</button>
+    </div>
+  </div>
+  
+  <div id="hearts-layer"></div>
+
+  <!-- Load đúng thứ tự này -->
+  <script src="js/config.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/gene.js"></script>
+  <script src="js/level.js"></script>
+  <script src="js/cat.js"></script>
+  <script src="js/actions.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/expedition.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/features.js"></script>
+  <script src="js/achievements.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

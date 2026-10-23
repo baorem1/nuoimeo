@@ -1,0 +1,314 @@
+/* ==========================================
+   LINEAGE — HIỆU ỨNG CHỮ THEO DÒNG (6 RARITY)
+   ========================================== */
+
+.lineage-lineage {
+  position: relative;
+  display: inline-block;
+  margin: 8px 0;
+  padding: 6px 18px;
+  border-radius: 12px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 0.85em;
+  user-select: none;
+  transition: transform 0.2s;
+  vertical-align: middle;
+}
+
+.lineage-lineage .lineage-text {
+  position: relative;
+  display: inline-block;
+  z-index: 2;
+}
+
+/* ==========================================
+   1. COMMON — Xám nhạt, không hiệu ứng
+   ========================================== */
+.lineage-common {
+  background: #f0f0f0;
+}
+.lineage-common .lineage-text {
+  color: #888;
+}
+
+/* ==========================================
+   2. RARE — Gradient xanh dương chạy
+   ========================================== */
+.lineage-rare {
+  background: linear-gradient(135deg, #e0f4ff, #cce8ff);
+  box-shadow: 0 0 8px rgba(86, 198, 255, 0.3);
+}
+.lineage-rare .lineage-text {
+  background: linear-gradient(90deg, #2196f3, #03a9f4, #56c6ff, #03a9f4, #2196f3);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 3s linear infinite;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ==========================================
+   3. EPIC — Gradient tím + glow + pulse
+   ========================================== */
+.lineage-epic {
+  background: linear-gradient(135deg, #f0e0ff, #e8d0ff);
+  box-shadow: 0 0 12px rgba(184, 107, 255, 0.4);
+}
+.lineage-epic .lineage-text {
+  background: linear-gradient(90deg, #8a4ad6, #b86bff, #d4a5ff, #b86bff, #8a4ad6);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation:
+    gradientShift 2.5s linear infinite,
+    epicPulse 1.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(184, 107, 255, 0.6));
+}
+
+@keyframes epicPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+
+/* ==========================================
+   4. LEGENDARY — Vàng kim + shimmer + glow mạnh
+   ========================================== */
+.lineage-legendary {
+  background: linear-gradient(135deg, #fff8e0, #ffe0a0);
+  box-shadow:
+    0 0 16px rgba(255, 184, 0, 0.6),
+    inset 0 0 12px rgba(255, 184, 0, 0.15);
+}
+.lineage-legendary .lineage-text {
+  background: linear-gradient(90deg, #ffb800, #ffcc33, #ff7eb6, #ffcc33, #ffb800);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation:
+    gradientShift 2s linear infinite,
+    legendShimmer 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(255, 184, 0, 0.8));
+}
+
+@keyframes legendShimmer {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px rgba(255, 184, 0, 0.8)) brightness(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(255, 184, 0, 1)) brightness(1.25);
+  }
+}
+
+/* ==========================================
+   5. MYTHIC — Đỏ-hồng-tím + 3D + breathe
+   ========================================== */
+.lineage-mythic {
+  background: linear-gradient(135deg, #ff4444, #ff7eb6, #b86bff);
+  box-shadow:
+    0 0 20px rgba(255, 68, 68, 0.7),
+    0 0 30px rgba(184, 107, 255, 0.5),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
+  animation: mythicBreathe 2s ease-in-out infinite;
+}
+.lineage-mythic .lineage-text {
+  background: linear-gradient(90deg, #fff, #ffe0a0, #ff7eb6, #fff, #ffe0a0);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 1.5s linear infinite;
+  filter:
+    drop-shadow(0 0 4px rgba(255, 255, 255, 0.9))
+    drop-shadow(0 2px 0 rgba(255, 68, 68, 0.6))
+    drop-shadow(0 -2px 0 rgba(184, 107, 255, 0.6));
+  text-shadow: 0 0 20px rgba(255, 68, 68, 0.8);
+  font-style: italic;
+}
+
+@keyframes mythicBreathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 20px rgba(255, 68, 68, 0.7),
+      0 0 30px rgba(184, 107, 255, 0.5),
+      inset 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow:
+      0 0 30px rgba(255, 68, 68, 1),
+      0 0 45px rgba(184, 107, 255, 0.8),
+      inset 0 0 20px rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* ==========================================
+   6. SECRET — Cầu vồng + glitch + particles
+   ========================================== */
+.lineage-secret {
+  background: linear-gradient(
+    90deg,
+    #ff0000, #ff7f00, #ffff00, #00ff00,
+    #0000ff, #4b0082, #9400d3, #ff0000
+  );
+  background-size: 400% auto;
+  box-shadow:
+    0 0 25px rgba(255, 0, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    0 0 60px rgba(255, 255, 0, 0.4);
+  animation:
+    secretHue 3s linear infinite,
+    secretGlitch 0.4s infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Particles lấp lánh */
+.lineage-secret::before,
+.lineage-secret::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+    radial-gradient(2px 2px at 40% 70%, #fff, transparent),
+    radial-gradient(2px 2px at 60% 20%, #fff, transparent),
+    radial-gradient(2px 2px at 80% 60%, #fff, transparent),
+    radial-gradient(2px 2px at 30% 80%, #fff, transparent),
+    radial-gradient(2px 2px at 70% 40%, #fff, transparent);
+  background-size: 100% 100%;
+  opacity: 0.8;
+  animation: particlesFloat 2s linear infinite;
+}
+.lineage-secret::after {
+  background-image:
+    radial-gradient(2px 2px at 15% 60%, #ffe0a0, transparent),
+    radial-gradient(2px 2px at 50% 15%, #a0e8ff, transparent),
+    radial-gradient(2px 2px at 85% 75%, #ffa0ff, transparent),
+    radial-gradient(2px 2px at 25% 40%, #fff, transparent);
+  animation-delay: -1s;
+  animation-duration: 2.5s;
+}
+
+@keyframes particlesFloat {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateY(-10px) translateX(5px); opacity: 0; }
+}
+
+.lineage-secret .lineage-text {
+  background: linear-gradient(
+    90deg,
+    #fff, #ffe0a0, #ff7eb6, #b86bff, #a0e8ff, #fff,
+    #ffe0a0, #ff7eb6, #b86bff, #a0e8ff
+  );
+  background-size: 400% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 1s linear infinite;
+  filter:
+    drop-shadow(0 0 6px rgba(255, 255, 255, 1))
+    drop-shadow(0 0 12px rgba(255, 0, 255, 0.8))
+    drop-shadow(0 0 18px rgba(0, 255, 255, 0.6));
+  font-style: italic;
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes secretGlitch {
+  0%, 100% { transform: translate(0, 0); }
+  20%      { transform: translate(-1px, 1px); }
+  40%      { transform: translate(1px, -1px); }
+  60%      { transform: translate(-1px, -1px); }
+  80%      { transform: translate(1px, 1px); }
+}
+
+@keyframes secretHue {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* ==========================================
+   RARITY BADGE — cho Mythic và Secret
+   ========================================== */
+.rarity-badge.rarity-mythic {
+  background: linear-gradient(90deg, #ff4444, #b86bff);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(255, 68, 68, 0.5);
+  animation: mythicBreathe 2s ease-in-out infinite;
+}
+
+.rarity-badge.rarity-secret {
+  background: linear-gradient(
+    90deg,
+    #ff0000, #ff7f00, #ffff00, #00ff00,
+    #0000ff, #9400d3, #ff0000
+  );
+  background-size: 300% auto;
+  color: #fff;
+  animation:
+    gradientShift 2s linear infinite,
+    secretGlitch 0.4s infinite;
+  box-shadow: 0 2px 15px rgba(255, 0, 255, 0.6);
+}
+
+/* ==========================================
+   CARD BORDER — cho Mythic và Secret
+   ========================================== */
+.cat-card.rarity-mythic {
+  border-color: #ff4444;
+  background: linear-gradient(135deg, #fff 0%, #ffe8e8 60%, #f0e0ff 100%);
+  box-shadow:
+    0 4px 30px rgba(255, 68, 68, 0.5),
+    0 0 20px rgba(184, 107, 255, 0.3);
+}
+
+.cat-card.rarity-secret {
+  border: 3px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(
+      45deg,
+      #ff0000, #ff7f00, #ffff00, #00ff00,
+      #0000ff, #9400d3, #ff0000
+    ) border-box;
+  background-size: 100%, 300% auto;
+  animation: secretBorderFlow 3s linear infinite;
+  box-shadow:
+    0 4px 40px rgba(255, 0, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4);
+}
+
+@keyframes secretBorderFlow {
+  0%   { background-position: 0 0, 0% center; }
+  100% { background-position: 0 0, 300% center; }
+}
+
+/* ==========================================
+   COLLECTION ITEM — hiệu ứng trong bộ sưu tập
+   ========================================== */
+.collection-item.rarity-common    { background: #f9f9f9; }
+.collection-item.rarity-rare      { background: linear-gradient(135deg, #e0f4ff, #cce8ff); }
+.collection-item.rarity-epic      { background: linear-gradient(135deg, #f0e0ff, #e8d0ff); }
+.collection-item.rarity-legendary { background: linear-gradient(135deg, #fff8e0, #ffe0a0); }
+.collection-item.rarity-mythic    { background: linear-gradient(135deg, #ffe8e8, #f0e0ff); }
+.collection-item.rarity-secret {
+  background: linear-gradient(
+    135deg,
+    #ffd0d0, #ffe0c0, #ffffd0, #d0ffd0,
+    #d0e0ff, #e0d0ff, #ffd0ff
+  );
+  animation: secretHue 4s linear infinite;
+}   
