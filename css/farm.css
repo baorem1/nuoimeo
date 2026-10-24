@@ -1,0 +1,238 @@
+.farm-modal-content {
+  width: min(100%, 760px);
+  text-align: left;
+}
+
+.farm-modal-content > h1,
+.farm-modal-content > p {
+  text-align: center;
+}
+
+.farm-playground {
+  position: relative;
+  display: grid;
+  min-height: 270px;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  grid-auto-rows: 130px;
+  align-content: end;
+  align-items: end;
+  justify-items: center;
+  gap: 8px 4px;
+  overflow: hidden;
+  padding: 30px 16px 25px;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 18% 28%, rgba(255,255,255,.85) 0 5%, transparent 5.5%),
+    radial-gradient(ellipse at 24% 28%, rgba(255,255,255,.85) 0 7%, transparent 7.5%),
+    radial-gradient(ellipse at 76% 20%, rgba(255,255,255,.72) 0 5%, transparent 5.5%),
+    linear-gradient(180deg, #a9e5ff 0%, #d5f3ff 46%, #a9df83 47%, #69bc68 100%);
+  box-shadow: inset 0 -14px rgba(48, 131, 75, 0.12);
+}
+
+.farm-playground::before {
+  position: absolute;
+  right: 9%;
+  top: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffe889;
+  box-shadow: 0 0 26px rgba(255, 232, 137, 0.72);
+  content: '';
+}
+
+.farm-playground::after {
+  position: absolute;
+  inset: auto 5% 13px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(37, 112, 63, 0.18);
+  content: '';
+}
+
+.farm-scene-hint {
+  z-index: 1;
+  align-self: center;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.84);
+  color: #4f7552;
+  font-weight: 700;
+  text-align: center;
+}
+
+.farm-cat-playmate {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  animation: farm-hop 1.15s ease-in-out infinite;
+  animation-delay: calc(var(--farm-index, 0) * -0.22s);
+}
+
+.farm-cat-playmate-0 { --farm-index: 0; }
+.farm-cat-playmate-1 { --farm-index: 1; animation-name: farm-trot; }
+.farm-cat-playmate-2 { --farm-index: 2; animation-duration: 1.35s; }
+.farm-cat-playmate-3 { --farm-index: 3; animation-name: farm-trot; animation-duration: 1.5s; }
+
+.farm-cat-sprite {
+  display: grid;
+  width: clamp(58px, 12vw, 112px);
+  height: clamp(58px, 12vw, 112px);
+  place-items: center;
+  filter: drop-shadow(0 8px 5px rgba(37, 91, 53, 0.2));
+}
+
+.farm-cat-sprite .cat-img,
+.farm-cat-sprite svg {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
+
+.farm-chat-bubble {
+  position: absolute;
+  top: -17px;
+  right: 4px;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 9px rgba(52, 91, 58, 0.15);
+  animation: farm-bubble 1.6s ease-in-out infinite;
+}
+
+.farm-cat-name {
+  max-width: 100%;
+  overflow: hidden;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #426b48;
+  font-size: 0.8em;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.farm-cat-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.farm-cat-choice {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid #d6e9d4;
+  border-radius: 12px;
+  background: #f7fcf5;
+  color: #46624a;
+  font-size: 0.9em;
+  font-weight: 700;
+}
+
+.farm-cat-choice input {
+  width: 18px;
+  height: 18px;
+  accent-color: #50a866;
+}
+
+.farm-empty {
+  width: 100%;
+  color: #718096;
+  text-align: center;
+}
+
+.farm-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.farm-controls button {
+  min-height: 44px;
+}
+
+.farm-status {
+  min-height: 1.4em;
+  margin: 10px 0 0 !important;
+  color: #36834c !important;
+  font-size: 0.9em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.cat-card.is-in-farm .cat-portrait svg,
+.cat-card.is-in-farm .cat-portrait .cat-img {
+  animation: farm-card-bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes farm-card-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes farm-hop {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  22% { transform: translateY(-12px) rotate(-5deg); }
+  48% { transform: translateY(-28px) rotate(4deg); }
+  72% { transform: translateY(-7px) rotate(2deg); }
+}
+
+@keyframes farm-trot {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-8px) rotate(-7deg); }
+  50% { transform: translateX(0) translateY(-18px) rotate(0); }
+  75% { transform: translateX(8px) rotate(7deg); }
+}
+
+@keyframes farm-bubble {
+  0%, 100% { transform: translateY(2px) scale(.92); }
+  50% { transform: translateY(-4px) scale(1.08); }
+}
+
+@media (max-width: 600px) {
+  .farm-modal-content {
+    padding: 16px;
+  }
+
+  .farm-playground {
+    min-height: 215px;
+    padding: 28px 7px 20px;
+  }
+
+  .farm-cat-playmate {
+    width: 100%;
+  }
+
+  .farm-cat-name {
+    padding: 3px 7px;
+    font-size: 0.7em;
+  }
+
+  .farm-chat-bubble {
+    top: -13px;
+    right: 0;
+    width: 28px;
+    height: 28px;
+    font-size: 0.85em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .farm-cat-playmate,
+  .farm-chat-bubble {
+    animation: none;
+  }
+}

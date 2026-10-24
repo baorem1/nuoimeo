@@ -5,11 +5,10 @@ const EXPEDITION_TRIPS = [
 ];
 
 function getExpeditionReward(cat, baseReward) {
-  const rarityMultiplier = 1 + (RARITY_ORDER[cat.rarity] || 0) * 0.25;
   const levelMultiplier = 1 + (Math.max(1, cat.level) - 1) * 0.05;
   const equipmentMultiplier = 1 + getCatEquipmentBonus(cat, 'expeditionCoins');
   const luckMultiplier = 0.8 + Math.random() * 0.4;
-  return Math.round(baseReward * rarityMultiplier * levelMultiplier * equipmentMultiplier * luckMultiplier / 10) * 10;
+  return Math.round(baseReward * (ACTIVITY_RARITY_MULT[cat.rarity] || 1) * levelMultiplier * equipmentMultiplier * luckMultiplier / 10) * 10;
 }
 
 function getExpeditionDuration(cat, trip) {
@@ -45,6 +44,27 @@ function renderExpeditions(selectedCatId = null) {
   }
 
   list.innerHTML = cats.map(cat => {
+    if (cat.inFarm && !cat.expedition) {
+      return `<div class="breed-item expedition-item" style="display:block;margin-bottom:10px;">
+        <div style="font-weight:bold;">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
+        <p style="margin:8px 0;color:#36834c;">🌿 Đang vui chơi ở trang trại. Cho mèo về nhà trong trang trại trước khi bắt đầu thám hiểm.</p>
+      </div>`;
+    }
+
+    if (cat.mouseHunt && !cat.expedition) {
+      return `<div class="breed-item expedition-item" style="display:block;margin-bottom:10px;">
+        <div style="font-weight:bold;">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
+        <p style="margin:8px 0;color:#777;">🐭 ${cat.mouseHunt.status === 'ready' ? 'Bé đã về từ chuyến bắt chuột. Nhận kết quả trước khi thám hiểm nhé.' : 'Bé đang đi bắt chuột. Chờ chuyến đi kết thúc rồi mới thám hiểm nhé.'}</p>
+      </div>`;
+    }
+
+    if (cat.mazeTrip && !cat.expedition) {
+      return `<div class="breed-item expedition-item" style="display:block;margin-bottom:10px;">
+        <div style="font-weight:bold;">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
+        <p style="margin:8px 0;color:#777;">🌀 Bé đang ở mê cung. ${cat.mazeTrip.status === 'ready' ? 'Nhận quà mê cung trước rồi mới bắt đầu chuyến khác nhé.' : 'Chờ bé tìm được lối ra rồi mới bắt đầu chuyến khác nhé.'}</p>
+      </div>`;
+    }
+
     if (cat.expedition) {
       const expedition = cat.expedition;
       const trip = EXPEDITION_TRIPS.find(item => item.id === expedition.tripId);
@@ -59,7 +79,7 @@ function renderExpeditions(selectedCatId = null) {
       </div>`;
     }
 
-    const rarityMultiplier = 1 + (RARITY_ORDER[cat.rarity] || 0) * 0.25;
+    const rarityMultiplier = ACTIVITY_RARITY_MULT[cat.rarity] || 1;
     const levelMultiplier = 1 + (Math.max(1, cat.level) - 1) * 0.05;
     const trips = EXPEDITION_TRIPS.map(trip => {
       const expectedReward = Math.round(trip.reward * rarityMultiplier * levelMultiplier * (1 + getCatEquipmentBonus(cat, 'expeditionCoins')) / 10) * 10;
@@ -90,7 +110,7 @@ function renderExpeditions(selectedCatId = null) {
 function startCatExpedition(catId, tripId) {
   const cat = state.cats.find(item => item.id === catId);
   const trip = EXPEDITION_TRIPS.find(item => item.id === tripId);
-  if (!cat || cat.expedition || !trip) return;
+  if (!cat || cat.expedition || cat.inFarm || cat.mouseHunt || cat.mazeTrip || !trip) return;
 
   updateAllCats();
   const now = Date.now();
@@ -129,6 +149,16 @@ function claimExpedition(catId) {
 
   const reward = cat.expedition.reward;
   const chestFound = cat.expedition.chestFound;
+  addAchievementProgress('expeditionsCompleted');
+  if (chestFound) addAchievementProgress('expeditionChestsFound');
+  const trip = EXPEDITION_TRIPS.find(item => item.id === cat.expedition.tripId);
+  recordCatDiary(cat, {
+    id: `expedition-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    type: 'expedition',
+    title: `Trở về từ ${trip?.name || 'chuyến thám hiểm'}`,
+    detail: `Mang về ${reward} xu${chestFound ? ' và tìm thấy một chiếc rương báu.' : '.'}`,
+    badge: cat.badges?.includes('first-expedition') ? null : 'first-expedition'
+  });
   cat.expedition = null;
   state.money += reward;
   if (chestFound) {

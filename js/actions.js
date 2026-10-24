@@ -1,7 +1,7 @@
 // ============ FEED / DRINK / BATH ============
 function feedCat(id, evt) {
   const cat = state.cats.find(c => c.id === id);
-  if (!cat || cat.expedition || cat.hunger >= 100 || state.money < COSTS.feed) return;
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || cat.hunger >= 100 || state.money < COSTS.feed) return;
   state.money -= COSTS.feed;
   cat.hunger = clamp(cat.hunger + 30, 0, 100);
   addExp(cat, EXP_GAIN.feed);
@@ -11,7 +11,7 @@ function feedCat(id, evt) {
 
 function drinkCat(id, evt) {
   const cat = state.cats.find(c => c.id === id);
-  if (!cat || cat.expedition || cat.thirst >= 100 || state.money < COSTS.drink) return;
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || cat.thirst >= 100 || state.money < COSTS.drink) return;
   state.money -= COSTS.drink;
   cat.thirst = clamp(cat.thirst + 30, 0, 100);
   addExp(cat, EXP_GAIN.drink);
@@ -21,7 +21,7 @@ function drinkCat(id, evt) {
 
 function bathCat(id, evt) {
   const cat = state.cats.find(c => c.id === id);
-  if (!cat || cat.expedition || cat.cleanliness >= 100 || state.money < COSTS.bath) return;
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || cat.cleanliness >= 100 || state.money < COSTS.bath) return;
   state.money -= COSTS.bath;
   cat.cleanliness = clamp(cat.cleanliness + 40, 0, 100);
   addExp(cat, EXP_GAIN.bath);
@@ -32,7 +32,7 @@ function bathCat(id, evt) {
 // ============ PET (vuốt ve) ============
 function petCat(id, evt) {
   const cat = state.cats.find(c => c.id === id);
-  if (!cat || cat.expedition || cat.happiness >= 100) return;
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || cat.happiness >= 100) return;
   cat.happiness = clamp(cat.happiness + 3, 0, 100);
   addExp(cat, EXP_GAIN.pet);
   if (evt) {
@@ -43,36 +43,80 @@ function petCat(id, evt) {
 }
 
 // ============ BUY ============
+let catRollInProgress = false;
+
 function buyCat() {
+  if (catRollInProgress) return;
   if (state.money < COSTS.adopt) {
-    alert('Không đủ tiền! Cần ' + COSTS.adopt + ' xu.');
+    alert(`Không đủ tiền! Cần ${COSTS.adopt.toLocaleString('vi-VN')} xu.`);
     return;
   }
+
+  catRollInProgress = true;
   state.money -= COSTS.adopt;
   const cat = createRandomCat();
   state.cats.push(cat);
   addToCollection(cat.rarity);
-  saveGame(); render();
+  saveGame();
+  render();
 
-  // Hiệu ứng đặc biệt theo rarity khi mua
-  if (cat.rarity === 'secret') {
-    showHearts(window.innerWidth / 2, window.innerHeight / 2, '🌈', 30);
-    showHearts(window.innerWidth / 2, window.innerHeight / 2, '✨', 20);
-    setTimeout(() => alert(`🌈 WOW! Bạn vừa mua được bé SECRET: ${cat.name}!`), 300);
-  } else if (cat.rarity === 'mythic') {
-    showHearts(window.innerWidth / 2, window.innerHeight / 2, '🔥', 15);
-    setTimeout(() => alert(`🔥 Bé MYTHIC ${cat.name} xuất hiện!`), 300);
-  } else if (cat.rarity === 'legendary') {
-    showHearts(window.innerWidth / 2, window.innerHeight / 2, '⭐', 10);
-  } else if (cat.rarity === 'epic') {
-    showHearts(window.innerWidth / 2, window.innerHeight / 2, '✨', 6);
-  }
+  const modal = document.getElementById('cat-roll-modal');
+  const title = document.getElementById('cat-roll-title');
+  const description = document.getElementById('cat-roll-description');
+  const reel = document.getElementById('cat-roll-reel');
+  const result = document.getElementById('cat-roll-result');
+  const closeButton = document.getElementById('btn-cat-roll-close');
+
+  title.textContent = '🎲 Đang quay mèo...';
+  description.textContent = 'Vận may sẽ quyết định bé mèo lần này!';
+  reel.classList.remove('hidden', 'cat-roll-reel-winner');
+  reel.innerHTML = '<span class="cat-roll-icon">🐱</span><strong class="cat-roll-name">???</strong><span class="cat-roll-rarity">Đang quay...</span>';
+  result.classList.add('hidden');
+  result.replaceChildren();
+  closeButton.classList.add('hidden');
+  modal.classList.remove('hidden');
+
+  let frame = 0;
+  const interval = setInterval(() => {
+    reel.classList.remove('cat-roll-pulse');
+    void reel.offsetWidth;
+    reel.classList.add('cat-roll-pulse');
+    reel.querySelector('.cat-roll-name').textContent = NAMES[frame % NAMES.length];
+    frame++;
+  }, 110);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    catRollInProgress = false;
+    title.textContent = '🎉 Mèo mới đã xuất hiện!';
+    description.textContent = `Đã dùng ${COSTS.adopt} xu để quay mèo.`;
+    reel.classList.remove('cat-roll-pulse');
+    reel.classList.add('hidden');
+    result.classList.remove('hidden');
+    result.innerHTML = `
+      <div class="cat-roll-portrait">${renderCatSVG(cat)}</div>
+      <strong class="cat-roll-result-name">${cat.name}</strong>
+      <span class="cat-roll-result-rarity rarity-${cat.rarity}">${RARITY_EMOJI[cat.rarity]} ${RARITY_LABEL[cat.rarity]}</span>
+      <span class="cat-roll-result-trait">${cat.trait.emoji} ${cat.trait.name}</span>
+    `;
+    closeButton.classList.remove('hidden');
+
+    if (cat.rarity === 'secret') showHearts(window.innerWidth / 2, window.innerHeight / 2, '🌈', 30);
+    else if (cat.rarity === 'mythic') showHearts(window.innerWidth / 2, window.innerHeight / 2, '🔥', 18);
+    else if (cat.rarity === 'legendary') showHearts(window.innerWidth / 2, window.innerHeight / 2, '⭐', 12);
+    else if (cat.rarity === 'epic') showHearts(window.innerWidth / 2, window.innerHeight / 2, '✨', 8);
+  }, 2200);
+}
+
+function closeCatRoll() {
+  if (catRollInProgress) return;
+  document.getElementById('cat-roll-modal').classList.add('hidden');
 }
 
 // ============ SELL (Đã dùng Popup xịn) ============
 function sellCat(id, evt) {
   const cat = state.cats.find(c => c.id === id);
-  if (!cat || cat.expedition) return;
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip) return;
   const price = getSellPrice(cat);
   
   // Dùng Popup xịn để xác nhận
@@ -162,7 +206,7 @@ function processAuctions() {
 
 function startCatAuction(id) {
   const cat = state.cats.find(item => item.id === id);
-  if (!cat || cat.expedition || cat.level < 5 || cat.auctionRejected) return;
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || cat.level < 5 || cat.auctionRejected) return;
 
   const confirmStart = window.confirm(`Đưa ${cat.name} lên đấu giá? Sau 1 phút sẽ có giá ngẫu nhiên từ 50% đến 200% giá bán hiện tại.`);
   if (!confirmStart) return;
@@ -215,7 +259,7 @@ function rejectAuctionOffer(id) {
 // ============ BREEDING ============
 function openBreedModal(id) {
   const cat = state.cats.find(c => c.id === id);
-  if (!cat || cat.expedition) return;
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip) return;
   if (cat.level < 5) { alert('Mèo phải đạt Lv5 (Mèo trưởng thành) mới sinh sản được!'); return; }
   if (cat.happiness < 50) { alert('Mèo chưa đủ hạnh phúc (cần ≥50)!'); return; }
 
@@ -229,6 +273,8 @@ function openBreedModal(id) {
   const candidates = state.cats.filter(c =>
     c.id !== cat.id &&
     !c.expedition &&
+    !c.mouseHunt &&
+    !c.mazeTrip &&
     c.gender !== cat.gender &&
     c.level >= 5 &&
     c.happiness >= 50 &&
@@ -271,7 +317,7 @@ function openBreedModal(id) {
 function breedCats(id1, id2) {
   const a = state.cats.find(c => c.id === id1);
   const b = state.cats.find(c => c.id === id2);
-  if (!a || !b || a.expedition || b.expedition) return;
+  if (!a || !b || a.expedition || b.expedition || a.mouseHunt || b.mouseHunt || a.mazeTrip || b.mazeTrip) return;
 
   const numBabies = Math.random() < 0.3 ? 2 : 1;
   const babies = [];
@@ -283,6 +329,7 @@ function breedCats(id1, id2) {
     state.cats.push(baby);
     addToCollection(baby.rarity);
   }
+  addAchievementProgress('catsBred', babies.length);
 
   const now = Date.now();
   a.lastBreedTime = now;

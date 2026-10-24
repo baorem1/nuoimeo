@@ -26,6 +26,12 @@ function render() {
         if (action === 'sell')  sellCat(id, e);
         if (action === 'auction') startCatAuction(id);
         if (action === 'expedition') openExpeditionModal(id);
+        if (action === 'diary') openCatDiary(id);
+        if (action === 'mouse-hunt') {
+          if (state.cats.find(cat => cat.id === id)?.mouseHunt) openMouseHuntModal();
+          else startMouseHunt(id);
+        }
+        if (action === 'maze') openMazeModal(id);
       });
     } else if (action === 'pet') {
       el.addEventListener('click', e => petCat(id, e));
@@ -55,19 +61,23 @@ function renderCatCard(cat, container) {
   
   // Gộp class
   const isExploring = Boolean(cat.expedition);
-  card.className = `cat-card rarity-${cat.rarity} ${tierClass}${isMax ? ' max-level' : ''}${isExploring ? ' is-exploring' : ''}`;
+  const isMouseHunting = Boolean(cat.mouseHunt);
+  const isInMaze = Boolean(cat.mazeTrip);
+  const isInFarm = Boolean(cat.inFarm && !isExploring && !isMouseHunting && !isInMaze);
+  const isAway = isExploring || isMouseHunting || isInMaze;
+  card.className = `cat-card rarity-${cat.rarity} ${tierClass}${isMax ? ' max-level' : ''}${isExploring ? ' is-exploring' : ''}${isInFarm ? ' is-in-farm' : ''}${isMouseHunting ? ' is-mouse-hunting' : ''}${isInMaze ? ' is-in-maze' : ''}`;
 
   const stage = getCatStage(cat);
   const allele = ALLELES[cat.color];
   const genderIcon = cat.gender === 'male' ? '♂' : '♀';
   const genderClass = cat.gender === 'male' ? 'gender-male' : 'gender-female';
-  const sleeping = !isExploring && (cat.happiness < 30 || cat.hunger < 20);
+  const sleeping = !isAway && (cat.happiness < 30 || cat.hunger < 20);
   const spriteClass = sleeping ? 'cat-sprite-wrap sleeping' : 'cat-sprite-wrap';
 
   const sellPrice = getSellPrice(cat);
-  const canAuction = cat.level >= 5 && !cat.auctionRejected && !isExploring;
+  const canAuction = cat.level >= 5 && !cat.auctionRejected && !isAway;
   const canBreedNow = stage === 'adult' && cat.happiness >= 50 &&
-                      (Date.now() - cat.lastBreedTime) >= 60*60*1000 && !isExploring;
+                      (Date.now() - cat.lastBreedTime) >= 60*60*1000 && !isAway;
 
   // Tính toán thanh EXP
   const curExp = getExpForLevel(cat.level);
@@ -84,9 +94,11 @@ function renderCatCard(cat, container) {
       <span class="cat-level-chip ${isMax ? 'lv10' : ''}">Lv ${cat.level}</span>
     </div>
     <div class="cat-hero">
-      <div class="${spriteClass} cat-portrait" ${isExploring ? '' : `data-action="pet" data-id="${cat.id}" role="button" tabindex="0" aria-label="Vuốt ve ${cat.name}"`}>
+      <div class="${spriteClass} cat-portrait" ${isAway ? '' : `data-action="pet" data-id="${cat.id}" role="button" tabindex="0" aria-label="Vuốt ve ${cat.name}"`}>
         ${sleeping ? '<div class="cat-sleeping">😴</div>' : renderCatSVG(cat)}
-        <span class="portrait-hint">${isExploring ? 'Đang đi thám hiểm' : 'Chạm để vuốt ve'}</span>
+        ${isMouseHunting ? `<img src="${MOUSE_HUNT_IMAGES[0]}" class="mouse-hunt-card-image" alt="Chuột">` : ''}
+        ${isInMaze ? '<span class="maze-card-badge" aria-label="Đang ở mê cung">🌀</span>' : ''}
+        <span class="portrait-hint">${isExploring ? 'Đang đi thám hiểm' : isMouseHunting ? '🐭 Đang đi bắt chuột' : isInMaze ? (cat.mazeTrip.status === 'ready' ? 'Đã tìm thấy lối ra' : 'Đang khám phá mê cung') : 'Chạm để vuốt ve'}</span>
       </div>
       <div class="cat-identity">
         <div class="cat-name">${cat.name}</div>
@@ -97,7 +109,7 @@ function renderCatCard(cat, container) {
           ${cat.trait?.emoji || '🐱'} ${cat.trait?.name || 'Bình thường'}
         </div>
         ${equippedItems.length ? `<div class="cat-equipment" aria-label="Trang bị vĩnh viễn">${equippedItems.map(item => `<span class="cat-equipment-item" title="${item.name}: ${item.description}"><img src="${item.image}" alt=""><span>${item.name}</span></span>`).join('')}</div>` : ''}
-        <div class="cat-stage">${isExploring ? '🧭 Đang thám hiểm' : LEVEL_TITLES[cat.level - 1]}</div>
+        <div class="cat-stage">${isExploring ? '🧭 Đang thám hiểm' : isMouseHunting ? (cat.mouseHunt.status === 'ready' ? '🐭 Kết quả bắt chuột sẵn sàng' : '🐭 Đang đi bắt chuột') : isInMaze ? (cat.mazeTrip.status === 'ready' ? '🌀 Chờ nhận quà mê cung' : '🌀 Đang khám phá mê cung') : isInFarm ? '🌿 Đang vui chơi ở trang trại' : LEVEL_TITLES[cat.level - 1]}</div>
       </div>
     </div>
 
@@ -116,21 +128,24 @@ function renderCatCard(cat, container) {
       ${renderStatBar('💖 Vui', 'happy',  cat.happiness)}
     </div>
 
-    <div class="cat-actions cat-care-actions">
-      <button data-action="feed" data-id="${cat.id}" ${isExploring || state.money < COSTS.feed || cat.hunger >= 100 ? 'disabled' : ''} title="Cho ăn (10 xu)" aria-label="Cho ${cat.name} ăn">🍖</button>
-      <button data-action="drink" data-id="${cat.id}" ${isExploring || state.money < COSTS.drink || cat.thirst >= 100 ? 'disabled' : ''} title="Cho uống (5 xu)" aria-label="Cho ${cat.name} uống">💧</button>
-      <button data-action="bath" data-id="${cat.id}" ${isExploring || state.money < COSTS.bath || cat.cleanliness >= 100 ? 'disabled' : ''} title="Tắm (15 xu)" aria-label="Tắm cho ${cat.name}">🛁</button>
+    <div class="cat-action-panel">
+      <div class="cat-actions cat-care-actions">
+        <button data-action="feed" data-id="${cat.id}" ${isAway || state.money < COSTS.feed || cat.hunger >= 100 ? 'disabled' : ''} title="Cho ăn (10 xu)" aria-label="Cho ${cat.name} ăn">🍖</button>
+        <button data-action="drink" data-id="${cat.id}" ${isAway || state.money < COSTS.drink || cat.thirst >= 100 ? 'disabled' : ''} title="Cho uống (5 xu)" aria-label="Cho ${cat.name} uống">💧</button>
+        <button data-action="bath" data-id="${cat.id}" ${isAway || state.money < COSTS.bath || cat.cleanliness >= 100 ? 'disabled' : ''} title="Tắm (15 xu)" aria-label="Tắm cho ${cat.name}">🛁</button>
+      </div>
+      <div class="cat-actions cat-market-actions">
+        <button class="btn-breed" data-action="breed" data-id="${cat.id}" ${!canBreedNow ? 'disabled' : ''}>💕 Ghép đôi</button>
+        <button class="btn-sell" data-action="sell" data-id="${cat.id}" ${isAway ? 'disabled' : ''}>💰 Bán · ${sellPrice} xu</button>
+      </div>
+      <div class="cat-actions cat-extra-actions">
+        ${!isExploring && !isInFarm && !isMouseHunting && !isInMaze ? `<button class="btn-secondary" data-action="expedition" data-id="${cat.id}">🧭 Đi thám hiểm</button>` : ''}
+        ${isMouseHunting || !isExploring && !isInFarm && !isInMaze ? `<button class="btn-secondary" data-action="mouse-hunt" data-id="${cat.id}">${isMouseHunting ? '🐭 Xem chuyến bắt chuột' : '🐭 Đi bắt chuột · 30 phút'}</button>` : ''}
+        ${isInMaze || !isExploring && !isInFarm && !isMouseHunting ? `<button class="btn-secondary" data-action="maze" data-id="${cat.id}">${isInMaze ? '🌀 Xem hành trình mê cung' : '🌀 Vào mê cung · 1 giờ'}</button>` : ''}
+        ${canAuction ? `<button class="btn-secondary" data-action="auction" data-id="${cat.id}">⚖️ Đưa lên đấu giá</button>` : ''}
+        <button class="btn-secondary" data-action="diary" data-id="${cat.id}">📔 Kỷ niệm · ${cat.badges?.length || 0} huy hiệu</button>
+      </div>
     </div>
-    <div class="cat-actions cat-market-actions">
-      <button class="btn-breed" data-action="breed" data-id="${cat.id}" ${!canBreedNow ? 'disabled' : ''}>💕 Ghép đôi</button>
-      <button class="btn-sell" data-action="sell" data-id="${cat.id}" ${isExploring ? 'disabled' : ''}>💰 Bán · ${sellPrice} xu</button>
-    </div>
-    ${!isExploring ? `<div class="cat-actions cat-auction-actions">
-      <button class="btn-secondary" data-action="expedition" data-id="${cat.id}">🧭 Đi thám hiểm</button>
-    </div>` : ''}
-    ${canAuction ? `<div class="cat-actions cat-auction-actions">
-      <button class="btn-secondary" data-action="auction" data-id="${cat.id}">⚖️ Đưa lên đấu giá</button>
-    </div>` : ''}
   `;
 
   container.appendChild(card);

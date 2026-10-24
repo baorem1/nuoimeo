@@ -13,7 +13,8 @@ function getCatPassiveExpPerHour(cat) {
   const rarity = PASSIVE_LEVEL_HOURS[cat.rarity] ? cat.rarity : 'common';
   const rarityMultiplier = RARITY_EXP_MULT[rarity] || 1;
   const equipmentMultiplier = 1 + getCatEquipmentBonus(cat, 'passiveExp');
-  return getExpForLevel(MAX_LEVEL) / (PASSIVE_LEVEL_HOURS[rarity] * rarityMultiplier) * equipmentMultiplier;
+  const farmMultiplier = cat.inFarm ? 1 + FARM_BONUS_RATE : 1;
+  return getExpForLevel(MAX_LEVEL) / (PASSIVE_LEVEL_HOURS[rarity] * rarityMultiplier) * equipmentMultiplier * farmMultiplier;
 }
 
 function addExp(cat, amount) {
@@ -26,6 +27,7 @@ function addExp(cat, amount) {
   while (cat.level < MAX_LEVEL && cat.exp >= getExpForLevel(cat.level + 1)) {
     cat.level++;
     leveledUp = true;
+    recordCatLevelMilestone(cat);
   }
 
   if (leveledUp) {

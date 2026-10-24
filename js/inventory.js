@@ -12,7 +12,11 @@ const PERMANENT_ITEMS = {
   slippers: { name: 'Dép siêu tốc', image: 'img/item/item_dep.png', description: 'Đi thám hiểm nhanh hơn 10%', effect: 'expeditionSpeed', bonus: 0.1 },
   hat: { name: 'Nón thám hiểm', image: 'img/item/item_non.png', description: '+8% tỉ lệ tìm thấy rương', effect: 'chestChance', bonus: 8 },
   luckyCharm: { name: 'Bùa may mắn', image: 'img/item/item_sip.png', description: '+5% tỉ lệ nhận trang bị trong rương', effect: 'itemChance', bonus: 5 },
-  goldenEgg: { name: 'Trứng vàng', image: 'img/item/item_trung.png', description: '+15% xu nhận từ rương', effect: 'chestCoins', bonus: 0.15 }
+  goldenEgg: { name: 'Trứng vàng', image: 'img/item/item_trung.png', description: '+15% xu nhận từ rương', effect: 'chestCoins', bonus: 0.15 },
+  coconut: { name: 'Dừa năng lượng', image: 'img/item/item_dua.png', description: '+20% EXP tự động', effect: 'passiveExp', bonus: 0.2 },
+  championMedal: { name: 'Huy hiệu nhà thám hiểm', image: 'img/item/item_huyhieu.png', description: '+12% tỉ lệ tìm thấy rương', effect: 'chestChance', bonus: 12 },
+  goldenCrown: { name: 'Vương miện hoàng gia', image: 'img/item/item_king.png', description: '+25% xu nhận từ rương', effect: 'chestCoins', bonus: 0.25 },
+  topTrophy: { name: 'Cúp quán quân', image: 'img/item/item_top.png', description: '+20% xu thám hiểm', effect: 'expeditionCoins', bonus: 0.2 }
 };
 
 function getCatEquipmentBonus(cat, effect) {
@@ -23,7 +27,7 @@ function getCatEquipmentBonus(cat, effect) {
 }
 
 function getAvailableCatsForItem(item) {
-  return (state.cats || []).filter(cat => !cat.expedition && cat[item.stat] < 100);
+  return (state.cats || []).filter(cat => !cat.expedition && !cat.mouseHunt && !cat.mazeTrip && cat[item.stat] < 100);
 }
 
 function renderShopItems() {
@@ -116,7 +120,7 @@ function renderInventory() {
   }).join('');
 
   const chestCount = Math.max(0, Number(state.inventory?.chest) || 0);
-  const eligibleChestCats = (state.cats || []).filter(cat => !cat.expedition);
+  const eligibleChestCats = (state.cats || []).filter(cat => !cat.expedition && !cat.mouseHunt && !cat.mazeTrip);
   const chestOptions = eligibleChestCats.map(cat =>
     `<option value="${cat.id}">${cat.name} · ${RARITY_LABEL[cat.rarity]}</option>`
   ).join('');
@@ -137,15 +141,15 @@ function renderInventory() {
   const relics = Object.entries(PERMANENT_ITEMS).map(([id, item]) => {
     const quantity = Math.max(0, Number(state.inventory?.relics?.[id]) || 0);
     const equippedCats = (state.cats || []).filter(cat => (cat.equipment || []).includes(id));
-    const availableCats = (state.cats || []).filter(cat => !cat.expedition && !(cat.equipment || []).includes(id));
+    const availableCats = (state.cats || []).filter(cat => !cat.expedition && !cat.mouseHunt && !cat.mazeTrip && !(cat.equipment || []).includes(id));
     const options = availableCats.map(cat =>
       `<option value="${cat.id}">${cat.name} · Lv${cat.level}</option>`
     ).join('');
     const equippedText = equippedCats.length
       ? `<div class="inventory-equipped-list">${equippedCats.map(cat => `
           <div class="inventory-equipped-row">
-            <small>Đang trang bị: ${cat.name}${cat.expedition ? ' · đang thám hiểm' : ''}</small>
-            <button class="btn-secondary" data-unequip-relic="${id}" data-cat-id="${cat.id}" ${cat.expedition ? 'disabled' : ''}>Tháo</button>
+            <small>Đang trang bị: ${cat.name}${cat.expedition ? ' · đang thám hiểm' : cat.mouseHunt ? ' · đang bắt chuột' : cat.mazeTrip ? ' · đang ở mê cung' : ''}</small>
+            <button class="btn-secondary" data-unequip-relic="${id}" data-cat-id="${cat.id}" ${cat.expedition || cat.mouseHunt || cat.mazeTrip ? 'disabled' : ''}>Tháo</button>
           </div>`).join('')}</div>`
       : '';
     const controls = quantity > 0 && availableCats.length
@@ -205,7 +209,7 @@ function useInventoryItem(itemId, catId) {
   const item = INVENTORY_ITEMS[itemId];
   const cat = state.cats.find(candidate => candidate.id === catId);
   const quantity = Math.max(0, Number(state.inventory?.[itemId]) || 0);
-  if (!item || !cat || cat.expedition || quantity < 1 || cat[item.stat] >= 100) return;
+  if (!item || !cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || quantity < 1 || cat[item.stat] >= 100) return;
 
   cat[item.stat] = clamp(cat[item.stat] + item.restore, 0, 100);
   state.inventory[itemId] = quantity - 1;
@@ -219,7 +223,7 @@ function equipPermanentItem(itemId, catId) {
   const item = PERMANENT_ITEMS[itemId];
   const cat = state.cats.find(candidate => candidate.id === catId);
   const quantity = Math.max(0, Number(state.inventory?.relics?.[itemId]) || 0);
-  if (!item || !cat || cat.expedition || quantity < 1) return;
+  if (!item || !cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || quantity < 1) return;
 
   if (!Array.isArray(cat.equipment)) cat.equipment = [];
   if (cat.equipment.includes(itemId)) return;
@@ -234,7 +238,7 @@ function equipPermanentItem(itemId, catId) {
 
 function unequipPermanentItem(itemId, catId) {
   const cat = state.cats.find(candidate => candidate.id === catId);
-  if (!PERMANENT_ITEMS[itemId] || !cat || cat.expedition || !cat.equipment?.includes(itemId)) return;
+  if (!PERMANENT_ITEMS[itemId] || !cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || !cat.equipment?.includes(itemId)) return;
 
   cat.equipment = cat.equipment.filter(equippedId => equippedId !== itemId);
   if (!state.inventory) state.inventory = {};
@@ -248,10 +252,11 @@ function unequipPermanentItem(itemId, catId) {
 function openTreasureChest(catId) {
   const cat = state.cats.find(candidate => candidate.id === catId);
   const chestCount = Math.max(0, Number(state.inventory?.chest) || 0);
-  if (!cat || cat.expedition || chestCount < 1) return;
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || chestCount < 1) return;
 
   const itemChance = Math.min(0.4, 0.1 + getCatEquipmentBonus(cat, 'itemChance') / 100);
   state.inventory.chest = chestCount - 1;
+  addAchievementProgress('chestsOpened');
 
   if (Math.random() < itemChance) {
     const itemIds = Object.keys(PERMANENT_ITEMS);
@@ -260,6 +265,7 @@ function openTreasureChest(catId) {
     state.inventory.relics[itemId] = (Number(state.inventory.relics[itemId]) || 0) + 1;
     const item = PERMANENT_ITEMS[itemId];
     saveGame();
+    checkAchievements();
     renderInventory();
     alert(`✨ Rương có trang bị hiếm! Bạn nhận được ${item.name}. Vật phẩm này dùng vĩnh viễn.`);
     return;
@@ -271,6 +277,7 @@ function openTreasureChest(catId) {
   state.money += coins;
   saveGame();
   render();
+  checkAchievements();
   renderInventory();
   alert(`💰 Trong rương có ${coins} xu!`);
 }

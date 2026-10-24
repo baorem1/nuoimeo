@@ -6,6 +6,12 @@
   <title>🏠 Nhà Mèo</title>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/cat-card.css">
+  <link rel="stylesheet" href="css/diary.css">
+  <link rel="stylesheet" href="css/farm.css">
+  <link rel="stylesheet" href="css/mouse-hunt.css">
+  <link rel="stylesheet" href="css/stray-hunt.css">
+  <link rel="stylesheet" href="css/maze.css">
+  <link rel="stylesheet" href="css/rare-shop.css">
   <link rel="stylesheet" href="css/effects.css">
   <link rel="stylesheet" href="css/lineage.css">
 </head>
@@ -65,6 +71,19 @@
     </div>
   </div>
 
+  <!-- NHẬT KÝ KỶ NIỆM CỦA MÈO -->
+  <div id="diary-modal" class="modal hidden">
+    <div class="modal-content diary-modal-content">
+      <h1 id="diary-cat-name">📔 Kỷ niệm của mèo</h1>
+      <p id="diary-cat-summary" class="diary-cat-summary"></p>
+      <h2>🏅 Huy hiệu</h2>
+      <div id="diary-badges" class="diary-badges"></div>
+      <h2>📖 Dòng thời gian</h2>
+      <div id="diary-timeline" class="diary-timeline"></div>
+      <button id="btn-diary-close" class="btn-secondary diary-close">Đóng</button>
+    </div>
+  </div>
+
   <!-- Popup Lên cấp -->
   <div id="levelup-modal" class="modal hidden">
     <div class="modal-content">
@@ -104,6 +123,51 @@
     </div>
   </div>
 
+  <!-- BẮT CHUỘT -->
+  <div id="mouse-hunt-modal" class="modal hidden">
+    <div class="modal-content mouse-hunt-modal-content">
+      <h1>🐭 Mèo đi bắt chuột</h1>
+      <p class="mouse-hunt-description">Mỗi chuyến kéo dài 30 phút. Mỗi con chuột được 10 xu; bé có thể bắt 10–20 con hoặc xui thì về tay không. Kết quả vẫn được tính khi bạn offline.</p>
+      <div id="mouse-hunt-list" class="mouse-hunt-list"></div>
+      <button id="btn-mouse-hunt-close" class="btn-secondary mouse-hunt-close">Đóng</button>
+    </div>
+  </div>
+
+  <!-- BẮT MÈO HOANG -->
+  <div id="stray-cat-hunt-modal" class="modal hidden">
+    <div class="modal-content stray-hunt-modal-content">
+      <h1>🐾 Bắt mèo hoang</h1>
+      <p class="stray-hunt-description">Đặt thức ăn làm mồi, chờ mèo hoang ghé qua. Mèo của bạn vẫn ở nhà và được chăm sóc bình thường.</p>
+      <div id="stray-cat-hunt-content"></div>
+      <button id="btn-stray-hunt-close" class="btn-secondary" style="width:100%;margin-top:14px;">Đóng</button>
+    </div>
+  </div>
+
+  <!-- MÊ CUNG -->
+  <div id="maze-modal" class="modal hidden">
+    <div class="modal-content maze-modal-content">
+      <h1>🌀 Mê cung mèo</h1>
+      <p class="maze-description">Thả một bé mèo vào mê cung rộng lớn. Bé sẽ tự tìm đường trong 1 giờ, nhặt thức ăn, xu và đôi khi tìm thấy rương. Về đích nhận thêm 300–500 xu!</p>
+      <div id="maze-list" class="maze-list"></div>
+      <button id="btn-maze-close" class="btn-secondary maze-close">Đóng</button>
+    </div>
+  </div>
+
+  <!-- TRANG TRẠI VUI CHƠI -->
+  <div id="farm-modal" class="modal hidden">
+    <div class="modal-content farm-modal-content">
+      <h1>🌿 Trang trại mèo</h1>
+      <p>Thả các bé ra đồng cỏ ngắm chúng nhảy nhót, chơi cùng nhau và nhận thêm 25% EXP tự động kể cả khi bạn offline. Mèo đang ở trại không thể đi thám hiểm hoặc bắt chuột.</p>
+      <div id="farm-playground" class="farm-playground" aria-label="Đồng cỏ vui chơi"></div>
+      <div id="farm-cat-list" class="farm-cat-list"></div>
+      <div class="farm-controls">
+        <button id="btn-farm-play" class="btn-primary">🌿 Thả mèo vào trại</button>
+        <button id="btn-farm-close" class="btn-secondary">Đóng</button>
+      </div>
+      <p id="farm-status" class="farm-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
   <!-- TÚI ĐỒ -->
   <div id="inventory-modal" class="modal hidden">
     <div class="modal-content" style="max-width: 560px; text-align: left;">
@@ -127,12 +191,16 @@
 
       <!-- Nội dung Tab Mua -->
       <div id="shop-buy-content">
-        <p style="text-align: center; color: #666; margin-bottom: 16px;">Mua một bé mèo ngẫu nhiên với giá <b>300 xu</b>.</p>
-        <div style="text-align: center; padding: 20px; background: #fafafa; border-radius: 12px;">
-          <div style="font-size: 64px; margin-bottom: 10px;">🎁</div>
-          <p style="font-size: 0.9em; color: #888; margin-bottom: 16px;">Cơ hội nhận các dòng mèo từ Common đến Secret!</p>
-          <button id="btn-buy-action" class="btn-primary" style="width: 100%;">Mua ngay (300 xu)</button>
-        </div>
+        <section class="random-cat-shop">
+          <div class="random-cat-shop-copy">
+            <strong>🎲 Quay mèo may mắn</strong>
+            <span>Một bé mèo ngẫu nhiên · 300 xu/lượt</span>
+          </div>
+          <button id="btn-buy-action" class="btn-primary">Quay ngay · 300 xu</button>
+        </section>
+        <p class="premium-shop-description">Gian hàng mèo hiếm: mỗi lượt có 2 Legendary, 1 Mythic và 1 Secret. Mèo trong shop luôn có tính cách tốt nhất.</p>
+        <p id="premium-shop-countdown" class="premium-shop-countdown" aria-live="polite"></p>
+        <div id="premium-cat-stock" class="premium-cat-stock"></div>
       </div>
 
       <!-- Nội dung Tab Bán -->
@@ -157,6 +225,20 @@
     </div>
   </div>
 
+  <div id="cat-roll-modal" class="modal hidden">
+    <div class="modal-content cat-roll-modal-content">
+      <h1 id="cat-roll-title">🎲 Đang quay mèo...</h1>
+      <p id="cat-roll-description">Vận may sẽ quyết định bé mèo lần này!</p>
+      <div id="cat-roll-reel" class="cat-roll-reel" aria-live="off">
+        <span class="cat-roll-icon">🐱</span>
+        <strong class="cat-roll-name">???</strong>
+        <span class="cat-roll-rarity">Đang quay...</span>
+      </div>
+      <div id="cat-roll-result" class="cat-roll-result hidden" aria-live="polite"></div>
+      <button id="btn-cat-roll-close" class="btn-secondary cat-roll-close hidden">Đóng</button>
+    </div>
+  </div>
+
   <!-- Popup Xác Nhận Xịn Xò -->
   <div id="confirm-modal" class="modal hidden">
     <div class="modal-content" style="max-width: 400px;">
@@ -176,25 +258,64 @@
 
   <!-- GAME CHÍNH -->
   <div id="game" class="hidden">
-       <header>
-      <button id="btn-daily" class="btn-icon btn-daily" title="Điểm danh hàng ngày">
-        📅 <span id="daily-badge" class="daily-badge">!</span>
-      </button>
-      
-      <div class="money">💰 <span id="money">500</span> xu</div>
-
-            <div class="header-right">
-        <!-- Nút Thành tựu -->
-        <button id="btn-achievement" class="btn-icon" title="Thành tựu">
-          <img src="img/thanhtuu.png" style="width: 22px; height: 22px; object-fit: contain;">
-        </button>
-        <button id="btn-collection" class="btn-icon" title="Bộ sưu tập">📖</button>
-        <button id="btn-expedition" class="btn-icon" title="Thám hiểm mèo">🧭</button>
-        <button id="btn-inventory" class="btn-icon" title="Túi đồ">🎒</button>
-        <button id="btn-auction" class="btn-icon" title="Đấu giá mèo">⚖️</button>
-        <button id="btn-shop" class="btn-icon" title="Cửa hàng">🛒</button>
-        <button id="btn-reset" class="btn-icon btn-danger-icon" title="Xóa dữ liệu">🗑️</button>
+    <header class="game-header">
+      <div class="header-top">
+        <div class="game-brand" aria-label="Nhà Mèo">
+          <span class="game-brand-icon">🐱</span>
+          <span class="game-brand-copy">
+            <strong>Nhà Mèo</strong>
+            <small>Ngôi nhà của những bé mèo</small>
+          </span>
+        </div>
+        <div class="header-wallet">
+          <button id="btn-daily" class="daily-checkin" title="Điểm danh hàng ngày">
+            <span aria-hidden="true">📅</span>
+            <span>Điểm danh</span>
+            <span id="daily-badge" class="daily-badge">!</span>
+          </button>
+          <div class="money" aria-label="Số xu hiện có">
+            <span class="wallet-coin" aria-hidden="true">🪙</span>
+            <span id="money">500</span>
+            <span class="wallet-unit">xu</span>
+          </div>
+        </div>
       </div>
+
+      <nav class="header-nav" aria-label="Chức năng trò chơi">
+        <div class="header-right">
+          <button id="btn-collection" class="header-action" title="Bộ sưu tập">
+            <span class="header-action-icon" aria-hidden="true">📖</span><span>Bộ sưu tập</span>
+          </button>
+          <button id="btn-stray-cat-hunt" class="header-action" title="Bắt mèo hoang">
+            <span class="header-action-icon" aria-hidden="true">🐾</span><span>Mèo hoang</span>
+          </button>
+          <button id="btn-expedition" class="header-action" title="Thám hiểm mèo">
+            <span class="header-action-icon" aria-hidden="true">🧭</span><span>Thám hiểm</span>
+          </button>
+          <button id="btn-maze" class="header-action" title="Mê cung mèo">
+            <span class="header-action-icon" aria-hidden="true">🌀</span><span>Mê cung</span>
+          </button>
+          <button id="btn-farm" class="header-action" title="Trang trại vui chơi">
+            <span class="header-action-icon" aria-hidden="true">🌿</span><span>Trang trại</span>
+          </button>
+          <button id="btn-inventory" class="header-action" title="Túi đồ">
+            <span class="header-action-icon" aria-hidden="true">🎒</span><span>Túi đồ</span>
+          </button>
+          <button id="btn-auction" class="header-action" title="Đấu giá mèo">
+            <span class="header-action-icon" aria-hidden="true">⚖️</span><span>Đấu giá</span>
+          </button>
+          <button id="btn-shop" class="header-action" title="Cửa hàng">
+            <span class="header-action-icon" aria-hidden="true">🛒</span><span>Cửa hàng</span>
+          </button>
+          <button id="btn-achievement" class="header-action" title="Thành tựu">
+            <span class="header-action-icon"><img src="img/thanhtuu.png" alt=""></span><span>Thành tựu</span>
+          </button>
+        </div>
+        <div class="header-nav-divider" aria-hidden="true"></div>
+        <button id="btn-reset" class="header-action header-action-danger" title="Xóa dữ liệu">
+          <span class="header-action-icon" aria-hidden="true">🗑️</span><span>Xóa game</span>
+        </button>
+      </nav>
     </header>
 
     <main>
@@ -227,6 +348,7 @@
 
   <!-- Load đúng thứ tự này -->
   <script src="js/config.js"></script>
+  <script src="js/diary.js"></script>
   <script src="js/state.js"></script>
   <script src="js/gene.js"></script>
   <script src="js/level.js"></script>
@@ -234,9 +356,13 @@
   <script src="js/actions.js"></script>
   <script src="js/inventory.js"></script>
   <script src="js/expedition.js"></script>
+  <script src="js/mouse-hunt.js"></script>
+  <script src="js/maze.js"></script>
+  <script src="js/stray-hunt.js"></script>
   <script src="js/render.js"></script>
   <script src="js/features.js"></script>
   <script src="js/achievements.js"></script>
+  <script src="js/farm.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

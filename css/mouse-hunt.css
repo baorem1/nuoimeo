@@ -1,0 +1,103 @@
+.mouse-hunt-modal-content {
+  max-width: 580px;
+  text-align: left;
+}
+
+.mouse-hunt-modal-content h1,
+.mouse-hunt-description {
+  text-align: center;
+}
+
+.mouse-hunt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 58vh;
+  overflow-y: auto;
+}
+
+.mouse-hunt-item {
+  display: block;
+  cursor: default;
+}
+
+.mouse-hunt-cat-name {
+  margin-bottom: 8px;
+  font-weight: 800;
+}
+
+.mouse-hunt-ready,
+.mouse-hunt-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mouse-hunt-preview {
+  width: 48px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.mouse-hunt-card-image {
+  position: absolute;
+  right: 5px;
+  bottom: 9px;
+  width: 42px;
+  height: 38px;
+  object-fit: contain;
+  padding: 2px;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  background: #fff8fc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+
+.mouse-hunt-status,
+.mouse-hunt-blocked,
+.mouse-hunt-empty,
+.mouse-hunt-result p {
+  width: 100%;
+  margin: 5px 0 !important;
+  text-align: center;
+  color: #667;
+  font-size: 0.9em;
+}
+
+.mouse-hunt-status {
+  color: #667 !important;
+}
+
+.mouse-hunt-result p {
+  color: #258253;
+  font-weight: 600;
+}
+
+.mouse-hunt-result.unlucky p {
+  color: #8a6d3b;
+}
+
+.mouse-hunt-ready button,
+.mouse-hunt-claim,
+.mouse-hunt-close {
+  width: 100%;
+}
+
+.mouse-hunt-claim {
+  margin-top: 9px;
+}
+
+.mouse-hunt-close {
+  margin-top: 14px;
+}
+
+@media (max-width: 480px) {
+  .mouse-hunt-preview {
+    width: 40px;
+    height: 36px;
+  }
+}

@@ -16,7 +16,7 @@ const ALLELES = {
   tim:    { name: 'Tím',       color: '#b88aff', eye: '#6a2ac9', rarity: 'epic', img: null },
   xanh:   { name: 'Xanh biển', color: '#6bb0ff', eye: '#1a4a9a', rarity: 'epic', img: null },
 
-  // Legendary (12 con - Dùng ảnh trong thư mục img/legenday)
+  // Legendary (20 con - Dùng ảnh trong thư mục img/legenday)
   kim1:   { name: 'Kim Quang 1', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen1.png' },
   kim2:   { name: 'Kim Quang 2', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen2.png' },
   kim3:   { name: 'Kim Quang 3', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen3.png' },
@@ -29,6 +29,14 @@ const ALLELES = {
   kim10:  { name: 'Kim Quang 10', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen10.png' },
   kim11:  { name: 'Kim Quang 11', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen11.png' },
   kim12:  { name: 'Kim Quang 12', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen12.png' },
+  kim13:  { name: 'Kim Quang 13', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen13.png' },
+  kim14:  { name: 'Kim Quang 14', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen14.png' },
+  kim15:  { name: 'Kim Quang 15', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen15.png' },
+  kim16:  { name: 'Kim Quang 16', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen16.png' },
+  kim17:  { name: 'Kim Quang 17', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen17.png' },
+  kim18:  { name: 'Kim Quang 18', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen18.png' },
+  kim19:  { name: 'Kim Quang 19', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen19.png' },
+  kim20:  { name: 'Kim Quang 20', color: '#ffcc33', eye: '#ff7eb6', rarity: 'legendary', img: 'img/legenday/anhlegen20.png' },
 
   // Mythic (7 con - Dùng ảnh trong thư mục img/mythic)
   long1:  { name: 'Long Lân 1', color: '#ff4444', eye: '#ffcc00', rarity: 'mythic', img: 'img/mythic/anh1.png' },
@@ -50,7 +58,7 @@ const ALLELES = {
 const COMMON_IDS    = ['cam', 'trang', 'den', 'xam', 'nau'];
 const RARE_IDS      = ['hong', 'vang', 'mint'];
 const EPIC_IDS      = ['tim', 'xanh'];
-const LEGENDARY_IDS = ['kim1','kim2','kim3','kim4','kim5','kim6','kim7','kim8','kim9','kim10','kim11','kim12'];
+const LEGENDARY_IDS = ['kim1','kim2','kim3','kim4','kim5','kim6','kim7','kim8','kim9','kim10','kim11','kim12','kim13','kim14','kim15','kim16','kim17','kim18','kim19','kim20'];
 const MYTHIC_IDS    = ['long1','long2','long3','long4','long5','long6','long7'];
 const SECRET_IDS    = ['anh1','anh2','anh3','anh4','anh5'];
 
@@ -58,7 +66,7 @@ const SECRET_IDS    = ['anh1','anh2','anh3','anh4','anh5'];
 const RARITY_LIMITS = {
   secret: 5,
   mythic: 7,
-  legendary: 12,
+  legendary: 20,
   epic: 9999,
   rare: 9999,
   common: 9999
@@ -93,6 +101,26 @@ const NAMES = [
 ];
 
 const COSTS = { feed: 10, drink: 5, bath: 15, adopt: 300 }; 
+const STRAY_CAT_HUNT = {
+  baitCost: 50,
+  duration: 30 * 60 * 1000,
+  cooldown: 4 * 60 * 60 * 1000,
+  successChance: 0.8,
+  rarityWeights: {
+    common: 54,
+    rare: 25,
+    epic: 13.5,
+    legendary: 5,
+    mythic: 2,
+    secret: 0.5
+  }
+};
+const PREMIUM_CAT_SHOP_REFRESH_HOURS = [3, 7, 11, 15, 19, 23];
+const PREMIUM_CAT_SHOP_PRICES = {
+  legendary: 100000,
+  mythic: 500000,
+  secret: 2000000
+};
 
 const MAX_LEVEL = 10;
 const LEVEL_EXP = [0, 30, 80, 160, 300, 500, 800, 1200, 1800, 2600];
@@ -119,6 +147,20 @@ const STAT_DECAY = { hunger: 8, thirst: 10, cleanliness: 5 };
 const SELL_MULT = { 
   common: 1, rare: 2, epic: 4, legendary: 10, mythic: 25, secret: 60
 };
+
+const ACTIVITY_RARITY_MULT = {
+  common: 1,
+  rare: 1.25,
+  epic: 1.6,
+  legendary: 2.1,
+  mythic: 2.8,
+  secret: 4
+};
+
+function scaleCoinsByRarity(amount, rarity) {
+  const multiplier = ACTIVITY_RARITY_MULT[rarity] || ACTIVITY_RARITY_MULT.common;
+  return Math.round(amount * multiplier / 10) * 10;
+}
 
 const TRAITS = [
   { name: 'Sáng tạo', type: 'good', mult: 1.2, emoji: '🎨' },

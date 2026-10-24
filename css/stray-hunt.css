@@ -1,0 +1,94 @@
+.stray-hunt-modal-content {
+  max-width: 540px;
+}
+
+.stray-hunt-modal-content h1,
+.stray-hunt-description {
+  text-align: center;
+}
+
+.stray-hunt-ready,
+.stray-hunt-status,
+.stray-hunt-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.stray-hunt-illustration {
+  padding: 14px;
+  border-radius: 50%;
+  background: #fff3dd;
+  font-size: 52px;
+}
+
+.stray-hunt-ready p,
+.stray-hunt-status p,
+.stray-hunt-result p {
+  margin: 0 !important;
+  color: #667 !important;
+}
+
+.stray-hunt-odds {
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff8ea;
+  font-size: 0.85em;
+  line-height: 1.7;
+}
+
+.stray-hunt-cooldown,
+.stray-hunt-status small {
+  color: #8a5a00;
+  font-weight: 700;
+}
+
+.stray-hunt-odds-note {
+  color: #777;
+  font-size: 0.8em;
+}
+
+.stray-hunt-ready button,
+.stray-hunt-result button {
+  width: 100%;
+}
+
+.stray-hunt-ready button:disabled {
+  background: #ddd;
+  color: #777;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.stray-hunt-portrait {
+  display: grid;
+  place-items: center;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff8dc, #eaf6ff);
+}
+
+.stray-hunt-portrait img,
+.stray-hunt-portrait svg {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.stray-hunt-rarity {
+  font-weight: 800;
+}
+
+.stray-hunt-miss {
+  padding: 16px 0;
+}
+
+@media (max-width: 420px) {
+  .stray-hunt-odds {
+    font-size: 0.78em;
+  }
+}

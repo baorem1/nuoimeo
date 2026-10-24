@@ -1,0 +1,238 @@
+.premium-shop-countdown {
+  margin: 0 0 12px !important;
+  color: #8a5a00 !important;
+  text-align: center;
+  font-size: 0.92em;
+  font-weight: 700;
+}
+
+.premium-shop-description {
+  margin: 16px 0 8px !important;
+  text-align: center;
+  color: #666 !important;
+  font-size: 0.9em;
+}
+
+.random-cat-shop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #f2d2e1;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #fff2f8, #fff9e8);
+}
+
+.random-cat-shop-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.random-cat-shop-copy strong {
+  color: #a83d72;
+}
+
+.random-cat-shop-copy span {
+  color: #776a73;
+  font-size: 0.85em;
+}
+
+.random-cat-shop button {
+  flex-shrink: 0;
+  padding: 10px 14px;
+}
+
+.cat-roll-modal-content {
+  max-width: 430px;
+}
+
+.cat-roll-modal-content h1,
+.cat-roll-modal-content > p {
+  text-align: center;
+}
+
+.cat-roll-reel {
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow: hidden;
+  border: 2px solid #ffd1e8;
+  border-radius: 20px;
+  background: radial-gradient(circle, #fff 10%, #fff0f7 100%);
+}
+
+.cat-roll-icon {
+  font-size: 60px;
+}
+
+.cat-roll-name {
+  color: #59445a;
+  font-size: 1.25em;
+}
+
+.cat-roll-rarity {
+  font-weight: 800;
+}
+
+.cat-roll-pulse {
+  animation: cat-roll-shake 0.11s linear infinite alternate;
+}
+
+@keyframes cat-roll-shake {
+  from { transform: translateX(-5px) rotate(-1deg); }
+  to { transform: translateX(5px) rotate(1deg); }
+}
+
+.cat-roll-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  animation: cat-roll-reveal 0.45s ease-out both;
+}
+
+.cat-roll-portrait {
+  display: grid;
+  place-items: center;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff8dc, #ffe5f2);
+}
+
+.cat-roll-portrait svg,
+.cat-roll-portrait img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.cat-roll-result-name {
+  color: #593c59;
+  font-size: 1.35em;
+}
+
+.cat-roll-result-rarity,
+.cat-roll-result-trait {
+  font-weight: 700;
+}
+
+.cat-roll-result-trait {
+  color: #258253;
+}
+
+.cat-roll-close {
+  width: 100%;
+}
+
+@keyframes cat-roll-reveal {
+  from { transform: scale(0.55) rotate(-8deg); opacity: 0; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.premium-cat-stock {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.premium-cat-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #f0dce8;
+  border-radius: 16px;
+  background: linear-gradient(150deg, #fffafd, #fff5e7);
+  text-align: center;
+}
+
+.premium-cat-item img,
+.premium-cat-item svg {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.result-cat-portrait {
+  display: grid;
+  place-items: center;
+  width: 100px;
+  height: 100px;
+}
+
+.premium-cat-name {
+  margin: 5px 0;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.premium-cat-rarity {
+  margin-bottom: 8px;
+  font-size: 0.9em;
+  font-weight: 700;
+}
+
+.premium-cat-trait {
+  margin-bottom: 8px;
+  color: #258253;
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.premium-cat-price {
+  margin: auto 0 9px;
+  color: #a56a00;
+  font-weight: 800;
+}
+
+.premium-cat-item button {
+  width: 100%;
+  padding: 10px 8px;
+}
+
+.premium-cat-item button:disabled {
+  background: #ddd;
+  color: #777;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.premium-cat-sold {
+  justify-content: center;
+  min-height: 220px;
+  color: #777;
+  background: #f5f5f5;
+}
+
+@media (max-width: 420px) {
+  .random-cat-shop {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .premium-cat-stock {
+    gap: 7px;
+  }
+
+  .premium-cat-item {
+    padding: 9px 7px;
+  }
+
+  .premium-cat-item img,
+  .premium-cat-item svg {
+    width: 76px;
+    height: 76px;
+  }
+}

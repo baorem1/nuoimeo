@@ -1,0 +1,155 @@
+.maze-modal-content {
+  max-width: 900px;
+  text-align: left;
+}
+
+.maze-modal-content h1,
+.maze-description {
+  text-align: center;
+}
+
+.maze-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.maze-cat-item {
+  padding: 14px;
+  border-radius: 16px;
+  background: #f7faf3;
+}
+
+.maze-card-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #fff8d9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  font-size: 20px;
+}
+
+.maze-cat-name {
+  margin-bottom: 8px;
+  font-weight: 800;
+}
+
+.maze-status {
+  margin: 6px 0 10px !important;
+  color: #61705d !important;
+  text-align: center;
+}
+
+.maze-start,
+.maze-claim,
+.maze-close {
+  width: 100%;
+}
+
+.maze-map-viewport {
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid #d7e3ca;
+  border-radius: 12px;
+  background: #e8efdf;
+  overscroll-behavior: contain;
+}
+
+.maze-map {
+  display: grid;
+  grid-template-columns: repeat(21, 24px);
+  grid-template-rows: repeat(21, 24px);
+  width: max-content;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 3px solid #52674c;
+  border-radius: 5px;
+  background: #dce9ce;
+}
+
+.maze-cell {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.maze-wall {
+  background: #52674c;
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+.maze-open {
+  background: #e4efd9;
+}
+
+.maze-visited {
+  background: #c4dfa9;
+}
+
+.maze-map .maze-start,
+.maze-map .maze-exit,
+.maze-map .maze-cat,
+.maze-map .maze-pickup {
+  font-size: 16px;
+}
+
+.maze-map .maze-cat {
+  z-index: 1;
+  border-radius: 50%;
+  background: #fff1a8;
+  animation: maze-cat-bob 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes maze-cat-bob {
+  from { transform: translateY(1px); }
+  to { transform: translateY(-2px); }
+}
+
+.maze-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  margin: 10px 0;
+  color: #65715f;
+  font-size: 0.85em;
+}
+
+.maze-loot {
+  margin: 10px 0 0 !important;
+  color: #61705d !important;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.maze-close {
+  margin-top: 14px;
+}
+
+@media (max-width: 520px) {
+  .maze-modal-content {
+    padding: 18px 12px;
+  }
+
+  .maze-map {
+    grid-template-columns: repeat(21, 20px);
+    grid-template-rows: repeat(21, 20px);
+  }
+
+  .maze-cell {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
+}
