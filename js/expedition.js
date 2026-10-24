@@ -28,9 +28,7 @@ function formatExpeditionTime(milliseconds) {
 }
 
 function openExpeditionModal(selectedCatId = null) {
-  processExpeditions();
-  renderExpeditions(selectedCatId);
-  document.getElementById('expedition-modal').classList.remove('hidden');
+  openActivityManager('expedition', selectedCatId);
 }
 
 function renderExpeditions(selectedCatId = null) {
@@ -45,21 +43,21 @@ function renderExpeditions(selectedCatId = null) {
 
   list.innerHTML = cats.map(cat => {
     if (cat.inFarm && !cat.expedition) {
-      return `<div class="breed-item expedition-item" style="display:block;margin-bottom:10px;">
+      return `<div class="breed-item expedition-item activity-cat-card" style="display:block;margin-bottom:10px;">
         <div style="font-weight:bold;">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
         <p style="margin:8px 0;color:#36834c;">🌿 Đang vui chơi ở trang trại. Cho mèo về nhà trong trang trại trước khi bắt đầu thám hiểm.</p>
       </div>`;
     }
 
     if (cat.mouseHunt && !cat.expedition) {
-      return `<div class="breed-item expedition-item" style="display:block;margin-bottom:10px;">
+      return `<div class="breed-item expedition-item activity-cat-card" style="display:block;margin-bottom:10px;">
         <div style="font-weight:bold;">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
         <p style="margin:8px 0;color:#777;">🐭 ${cat.mouseHunt.status === 'ready' ? 'Bé đã về từ chuyến bắt chuột. Nhận kết quả trước khi thám hiểm nhé.' : 'Bé đang đi bắt chuột. Chờ chuyến đi kết thúc rồi mới thám hiểm nhé.'}</p>
       </div>`;
     }
 
     if (cat.mazeTrip && !cat.expedition) {
-      return `<div class="breed-item expedition-item" style="display:block;margin-bottom:10px;">
+      return `<div class="breed-item expedition-item activity-cat-card" style="display:block;margin-bottom:10px;">
         <div style="font-weight:bold;">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
         <p style="margin:8px 0;color:#777;">🌀 Bé đang ở mê cung. ${cat.mazeTrip.status === 'ready' ? 'Nhận quà mê cung trước rồi mới bắt đầu chuyến khác nhé.' : 'Chờ bé tìm được lối ra rồi mới bắt đầu chuyến khác nhé.'}</p>
       </div>`;
@@ -73,7 +71,7 @@ function renderExpeditions(selectedCatId = null) {
            <button class="btn-primary" data-expedition-action="claim" data-id="${cat.id}" style="width:100%;">Nhận quà</button>`
         : `<p style="margin:8px 0;color:#777;">Đang thám hiểm ${trip?.name || 'một nơi xa'} · còn ${formatExpeditionTime(expedition.endsAt - Date.now())}</p>
            <small style="color:#777;">Dự kiến ${expedition.reward} xu · ${expedition.chestChance}% tìm thấy rương.</small>`;
-      return `<div class="breed-item expedition-item" style="display:block;margin-bottom:10px;">
+      return `<div class="breed-item expedition-item activity-cat-card" style="display:block;margin-bottom:10px;">
         <div style="font-weight:bold;">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
         ${status}
       </div>`;
@@ -90,7 +88,7 @@ function renderExpeditions(selectedCatId = null) {
       </button>`;
     }).join('');
     const selected = selectedCatId === cat.id ? ' expedition-selected' : '';
-    return `<div class="breed-item expedition-item${selected}" style="display:block;margin-bottom:10px;">
+    return `<div class="breed-item expedition-item activity-cat-card${selected}" style="display:block;margin-bottom:10px;">
       <div style="font-weight:bold;margin-bottom:10px;">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
       <div class="expedition-trips">${trips}</div>
     </div>`;
@@ -105,6 +103,7 @@ function renderExpeditions(selectedCatId = null) {
       }
     });
   });
+  updateActivityManagerSummary();
 }
 
 function startCatExpedition(catId, tripId) {
@@ -138,8 +137,13 @@ function processExpeditions() {
     }
   });
 
-  const modal = document.getElementById('expedition-modal');
-  if (modal && !modal.classList.contains('hidden')) renderExpeditions();
+  if (isActivityManagerOpen('expedition')) {
+    const list = document.getElementById('expedition-list');
+    const scrollTop = list.scrollTop;
+    renderExpeditions();
+    list.scrollTop = scrollTop;
+  }
+  if (isActivityManagerOpen()) updateActivityManagerSummary();
   return changed;
 }
 

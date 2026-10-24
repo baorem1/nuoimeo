@@ -777,7 +777,15 @@ footer { text-align: center; padding: 24px; }
     scroll-behavior: auto !important;
   }
 
+  .game-header {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
   .cat-card:hover,
+  .cat-card:active,
+  .cat-card *:hover,
+  .cat-card *:active,
   .btn-primary:hover,
   .btn-shop:hover,
   .header-action:hover,

@@ -6,7 +6,7 @@ function feedCat(id, evt) {
   cat.hunger = clamp(cat.hunger + 30, 0, 100);
   addExp(cat, EXP_GAIN.feed);
   if (evt) showExpPopup(evt.clientX, evt.clientY, getCatExpGain(cat, EXP_GAIN.feed));
-  saveGame(); render();
+  saveGame(); renderCatCardById(id);
 }
 
 function drinkCat(id, evt) {
@@ -16,7 +16,7 @@ function drinkCat(id, evt) {
   cat.thirst = clamp(cat.thirst + 30, 0, 100);
   addExp(cat, EXP_GAIN.drink);
   if (evt) showExpPopup(evt.clientX, evt.clientY, getCatExpGain(cat, EXP_GAIN.drink));
-  saveGame(); render();
+  saveGame(); renderCatCardById(id);
 }
 
 function bathCat(id, evt) {
@@ -26,7 +26,7 @@ function bathCat(id, evt) {
   cat.cleanliness = clamp(cat.cleanliness + 40, 0, 100);
   addExp(cat, EXP_GAIN.bath);
   if (evt) showExpPopup(evt.clientX, evt.clientY, getCatExpGain(cat, EXP_GAIN.bath));
-  saveGame(); render();
+  saveGame(); renderCatCardById(id);
 }
 
 // ============ PET (vuốt ve) ============
@@ -39,7 +39,7 @@ function petCat(id, evt) {
     showExpPopup(evt.clientX, evt.clientY, getCatExpGain(cat, EXP_GAIN.pet));
     showHearts(evt.clientX, evt.clientY, '💖', 3);
   }
-  saveGame(); render();
+  saveGame(); renderCatCardById(id);
 }
 
 // ============ BUY ============

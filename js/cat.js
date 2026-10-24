@@ -129,6 +129,7 @@ function shadeColor(hex, percent) {
 
 function renderCatSVG(cat) {
   const allele = ALLELES[cat.color] || ALLELES.cam;
+  const showAuraAnimation = !window.matchMedia('(max-width: 600px)').matches;
   
   // NẾU CÓ ẢNH THÌ HIỆN ẢNH
   if (allele.img) {
@@ -149,7 +150,7 @@ function renderCatSVG(cat) {
 
   const aura = hasAura
     ? `<circle cx="60" cy="60" r="55" fill="none" stroke="${auraColor}" stroke-width="2" opacity="0.6">
-         ${cat.rarity === 'secret' ? '<animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="4s" repeatCount="indefinite"/>' : ''}
+         ${cat.rarity === 'secret' && showAuraAnimation ? '<animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="4s" repeatCount="indefinite"/>' : ''}
        </circle>
        <defs>
          <linearGradient id="gold" x1="0" x2="1"><stop offset="0" stop-color="#ffb800"/><stop offset="1" stop-color="#ff7eb6"/></linearGradient>

@@ -4,6 +4,7 @@ function init() {
   processStrayCatHunt();
   updateAllCats();
   checkDailyLogin();
+  initActivityManager();
   // Thêm 2 dòng này vào đầu hàm init()
   document.getElementById('btn-achievement').addEventListener('click', openAchievements);
   document.getElementById('btn-achievement-close').addEventListener('click', () => document.getElementById('achievement-modal').classList.add('hidden'));
@@ -18,10 +19,8 @@ function init() {
   document.getElementById('btn-auction').addEventListener('click', openAuctionModal);
   document.getElementById('btn-auction-close').addEventListener('click', () => document.getElementById('auction-modal').classList.add('hidden'));
   document.getElementById('btn-expedition').addEventListener('click', () => openExpeditionModal());
-  document.getElementById('btn-expedition-close').addEventListener('click', () => document.getElementById('expedition-modal').classList.add('hidden'));
   document.getElementById('btn-maze').addEventListener('click', () => openMazeModal());
-  document.getElementById('btn-maze-close').addEventListener('click', () => document.getElementById('maze-modal').classList.add('hidden'));
-  document.getElementById('btn-mouse-hunt-close').addEventListener('click', () => document.getElementById('mouse-hunt-modal').classList.add('hidden'));
+  document.getElementById('btn-activity-manager').addEventListener('click', () => openActivityManager('expedition'));
   document.getElementById('btn-farm').addEventListener('click', openFarm);
   document.getElementById('btn-farm-play').addEventListener('click', toggleFarmPlay);
   document.getElementById('btn-farm-close').addEventListener('click', closeFarm);
@@ -63,6 +62,7 @@ function init() {
   }
 
   // Vòng lặp tự động update
+  const updateInterval = window.matchMedia('(max-width: 600px)').matches ? 15000 : 5000;
   setInterval(() => {
     updateAllCats();
     processAuctions();
@@ -73,7 +73,7 @@ function init() {
     processPremiumCatShop();
     saveGame();
     render();
-  }, 5000);
+  }, updateInterval);
 
   window.addEventListener('beforeunload', () => saveGame());
   document.addEventListener('visibilitychange', () => {

@@ -808,6 +808,29 @@
   min-height: 28px;
 }
 
+@media (max-width: 600px) {
+  .cat-card,
+  .cat-card.rarity-rare,
+  .cat-card.rarity-epic,
+  .cat-card.rarity-legendary,
+  .cat-card.rarity-mythic,
+  .cat-card.rarity-secret {
+    background: #fff9fc;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 3px 8px rgba(74, 59, 82, 0.08);
+  }
+
+  .cat-card.is-exploring {
+    filter: none;
+  }
+
+  .cat-sprite-wrap svg,
+  .cat-sprite-wrap .cat-img {
+    filter: none;
+  }
+}
+
 .cat-card-top .rarity-badge {
   padding: 5px 10px;
   border-radius: 999px;

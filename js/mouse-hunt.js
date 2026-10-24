@@ -12,13 +12,11 @@ function getMouseHuntReward(cat, miceCaught) {
   return scaleCoinsByRarity(miceCaught * MOUSE_HUNT_COIN_PER_MOUSE, cat.rarity);
 }
 
-function openMouseHuntModal() {
-  processMouseHunts();
-  renderMouseHunts();
-  document.getElementById('mouse-hunt-modal').classList.remove('hidden');
+function openMouseHuntModal(selectedCatId = null) {
+  openActivityManager('mouse-hunt', selectedCatId);
 }
 
-function renderMouseHunts() {
+function renderMouseHunts(selectedCatId = null) {
   const list = document.getElementById('mouse-hunt-list');
   if (!list) return;
 
@@ -54,7 +52,8 @@ function renderMouseHunts() {
       content = `<div class="mouse-hunt-ready">${mouseGallery}<p>Nếu bắt được 10–20 con: ${minReward}–${maxReward} xu; có thể về tay không.</p><button class="btn-secondary" data-mouse-hunt-start="${cat.id}">🔎 Bắt đầu chuyến đi · 30 phút</button></div>`;
     }
 
-    return `<section class="breed-item mouse-hunt-item">
+    const selected = selectedCatId === cat.id ? ' mouse-hunt-selected' : '';
+    return `<section class="breed-item mouse-hunt-item activity-cat-card${selected}">
       <div class="mouse-hunt-cat-name">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
       ${content}
     </section>`;
@@ -66,6 +65,7 @@ function renderMouseHunts() {
   list.querySelectorAll('[data-mouse-hunt-claim]').forEach(button => {
     button.addEventListener('click', () => claimMouseHunt(button.dataset.mouseHuntClaim));
   });
+  updateActivityManagerSummary();
 }
 
 async function confirmMouseHuntStart(catId) {
@@ -114,8 +114,13 @@ function processMouseHunts() {
     }
   });
 
-  const modal = document.getElementById('mouse-hunt-modal');
-  if (modal && !modal.classList.contains('hidden')) renderMouseHunts();
+  if (isActivityManagerOpen('mouse-hunt')) {
+    const list = document.getElementById('mouse-hunt-list');
+    const scrollTop = list.scrollTop;
+    renderMouseHunts();
+    list.scrollTop = scrollTop;
+  }
+  if (isActivityManagerOpen()) updateActivityManagerSummary();
   return changed;
 }
 

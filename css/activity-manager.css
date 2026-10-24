@@ -1,0 +1,283 @@
+.activity-manager-content {
+  width: 100%;
+  max-width: 760px;
+  padding: 22px;
+  text-align: left;
+}
+
+.activity-manager-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.activity-manager-heading h1 {
+  margin-bottom: 4px;
+}
+
+.activity-manager-heading p {
+  margin: 0 0 14px;
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.activity-manager-x {
+  display: grid;
+  width: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  place-items: center;
+  border: 1px solid #f0dce8;
+  border-radius: 12px;
+  background: #fff7fb;
+  color: #8f4771;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.activity-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.activity-overview-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 9px;
+  border: 1px solid #eee4eb;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #fff, #fff8fb);
+}
+
+.activity-overview-card strong {
+  color: #8f4771;
+  font-size: 1.15rem;
+}
+
+.activity-overview-card span {
+  color: #718096;
+  font-size: 0.76rem;
+}
+
+.activity-overview-card:nth-child(2) strong {
+  color: #32846a;
+}
+
+.activity-overview-card:nth-child(3) strong {
+  color: #b47a14;
+}
+
+.activity-manager-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 5px;
+  border-radius: 14px;
+  background: #f6f0f4;
+}
+
+.activity-manager-tab {
+  min-width: 0;
+  min-height: 42px;
+  padding: 7px 5px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: #765d70;
+  font-size: 0.85rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.activity-manager-tab[aria-selected="true"] {
+  border-color: #f0d5e3;
+  background: #fff;
+  color: #a34875;
+  box-shadow: 0 2px 8px rgba(87, 53, 75, 0.08);
+}
+
+.activity-manager-tab:focus-visible,
+.activity-manager-x:focus-visible {
+  outline: 3px solid rgba(214, 75, 142, 0.35);
+  outline-offset: 2px;
+}
+
+.activity-panel-heading {
+  margin-bottom: 8px;
+}
+
+.activity-panel-heading h2 {
+  margin: 0 0 2px;
+  color: #4a3b52;
+  font-size: 1rem;
+}
+
+.activity-panel-heading p {
+  margin: 0;
+  color: #718096;
+  font-size: 0.8rem;
+}
+
+.activity-cat-list {
+  gap: 8px;
+  margin-bottom: 0;
+  max-height: min(56vh, 500px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.activity-cat-card {
+  margin-bottom: 0 !important;
+  padding: 12px;
+  border: 1px solid #e9e1e8;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #fff, #fcf9fb);
+  box-shadow: 0 3px 10px rgba(74, 59, 82, 0.05);
+}
+
+.activity-cat-card.expedition-selected,
+.activity-cat-card.mouse-hunt-selected,
+.activity-cat-card.maze-selected {
+  border-color: #d99ab9;
+  box-shadow: 0 0 0 2px rgba(214, 75, 142, 0.12);
+}
+
+.activity-cat-card > :first-child {
+  color: #4a3b52;
+  font-weight: 800;
+}
+
+.activity-cat-card p {
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.activity-cat-card button {
+  min-height: 42px;
+  border-radius: 11px;
+}
+
+.activity-cat-card .expedition-trips {
+  gap: 6px;
+}
+
+.activity-cat-card .expedition-start {
+  min-height: 54px;
+  padding: 7px 4px;
+  border: 1px solid #e7dce5;
+  background: #fff;
+  color: #655469;
+  font-size: 0.82rem;
+}
+
+.activity-cat-card .expedition-start small {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.activity-cat-card .mouse-hunt-ready,
+.activity-cat-card .mouse-hunt-result {
+  gap: 6px;
+}
+
+.activity-cat-card .mouse-hunt-ready p,
+.activity-cat-card .mouse-hunt-result p {
+  margin: 2px 0 !important;
+}
+
+.activity-cat-card .maze-map-viewport {
+  max-height: 42vh;
+}
+
+.activity-cat-card .maze-legend {
+  gap: 5px 9px;
+  font-size: 0.74rem;
+}
+
+.activity-cat-card .maze-loot {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 600px) {
+  .activity-manager-content {
+    padding: 15px 12px;
+  }
+
+  .activity-manager-heading {
+    gap: 6px;
+  }
+
+  .activity-manager-heading h1 {
+    font-size: 1.2rem;
+  }
+
+  .activity-manager-heading p {
+    margin-bottom: 9px;
+    font-size: 0.8rem;
+  }
+
+  .activity-manager-x {
+    width: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+  .activity-overview {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .activity-overview-card {
+    padding: 7px 4px;
+  }
+
+  .activity-manager-tabs {
+    gap: 4px;
+    margin-bottom: 9px;
+    padding: 4px;
+  }
+
+  .activity-manager-tab {
+    min-height: 40px;
+    padding: 6px 2px;
+    font-size: 0.76rem;
+  }
+
+  .activity-cat-list {
+    max-height: min(52dvh, 440px);
+  }
+
+  .activity-cat-card {
+    padding: 9px;
+    border-radius: 12px;
+  }
+
+  .activity-cat-card .expedition-trips {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-cat-card .expedition-start {
+    min-height: 44px;
+    text-align: left;
+  }
+
+  .activity-cat-card .mouse-hunt-preview {
+    width: 32px;
+    height: 30px;
+  }
+
+  .activity-cat-card .maze-map-viewport {
+    max-height: 34dvh;
+    padding: 5px;
+  }
+}

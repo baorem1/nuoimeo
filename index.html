@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/mouse-hunt.css">
   <link rel="stylesheet" href="css/stray-hunt.css">
   <link rel="stylesheet" href="css/maze.css">
+  <link rel="stylesheet" href="css/activity-manager.css">
   <link rel="stylesheet" href="css/rare-shop.css">
   <link rel="stylesheet" href="css/effects.css">
   <link rel="stylesheet" href="css/lineage.css">
@@ -113,23 +114,38 @@
     </div>
   </div>
 
-  <!-- POPUP THÁM HIỂM -->
-  <div id="expedition-modal" class="modal hidden">
-    <div class="modal-content" style="max-width: 620px; text-align: left;">
-      <h1 style="text-align:center;">🧭 Thám hiểm mèo</h1>
-      <p style="text-align:center;color:#777;">Chọn chuyến đi cho mèo. Mèo sẽ tiếp tục lớn lên khi bạn offline và nhận xu khi trở về.</p>
-      <div id="expedition-list" class="breed-list" style="max-height: 55vh; overflow-y: auto;"></div>
-      <button id="btn-expedition-close" class="btn-secondary" style="width:100%;">Đóng</button>
-    </div>
-  </div>
-
-  <!-- BẮT CHUỘT -->
-  <div id="mouse-hunt-modal" class="modal hidden">
-    <div class="modal-content mouse-hunt-modal-content">
-      <h1>🐭 Mèo đi bắt chuột</h1>
-      <p class="mouse-hunt-description">Mỗi chuyến kéo dài 30 phút. Mỗi con chuột được 10 xu; bé có thể bắt 10–20 con hoặc xui thì về tay không. Kết quả vẫn được tính khi bạn offline.</p>
-      <div id="mouse-hunt-list" class="mouse-hunt-list"></div>
-      <button id="btn-mouse-hunt-close" class="btn-secondary mouse-hunt-close">Đóng</button>
+  <!-- QUẢN LÝ HOẠT ĐỘNG MÈO -->
+  <div id="activity-manager-modal" class="modal hidden">
+    <div class="modal-content activity-manager-content">
+      <div class="activity-manager-heading">
+        <div>
+          <h1>🐾 Quản lý hoạt động</h1>
+          <p>Theo dõi mèo đang đi đâu, nhận quà khi trở về hoặc chọn chuyến mới.</p>
+        </div>
+        <button id="btn-activity-manager-close" class="activity-manager-x" aria-label="Đóng quản lý hoạt động">×</button>
+      </div>
+      <div class="activity-overview" aria-label="Tổng quan hoạt động">
+        <div class="activity-overview-card"><strong id="activity-count-home">0</strong><span>Ở nhà</span></div>
+        <div class="activity-overview-card"><strong id="activity-count-away">0</strong><span>Đang đi</span></div>
+        <div class="activity-overview-card"><strong id="activity-count-ready">0</strong><span>Có quà</span></div>
+      </div>
+      <div class="activity-manager-tabs" role="tablist" aria-label="Loại hoạt động">
+        <button id="activity-tab-expedition" class="activity-manager-tab" role="tab" aria-controls="activity-panel-expedition" aria-selected="true" data-activity-tab="expedition">🧭 Thám hiểm</button>
+        <button id="activity-tab-mouse-hunt" class="activity-manager-tab" role="tab" aria-controls="activity-panel-mouse-hunt" aria-selected="false" data-activity-tab="mouse-hunt">🐭 Bắt chuột</button>
+        <button id="activity-tab-maze" class="activity-manager-tab" role="tab" aria-controls="activity-panel-maze" aria-selected="false" data-activity-tab="maze">🌀 Mê cung</button>
+      </div>
+      <section id="activity-panel-expedition" class="activity-manager-panel" role="tabpanel" aria-labelledby="activity-tab-expedition">
+        <div class="activity-panel-heading"><h2>🧭 Chuyến thám hiểm</h2><p>Chọn điểm đến cho mèo đang ở nhà.</p></div>
+        <div id="expedition-list" class="breed-list activity-cat-list"></div>
+      </section>
+      <section id="activity-panel-mouse-hunt" class="activity-manager-panel hidden" role="tabpanel" aria-labelledby="activity-tab-mouse-hunt">
+        <div class="activity-panel-heading"><h2>🐭 Chuyến bắt chuột</h2><p>Chuyến đi 30 phút · có thể nhận xu hoặc về tay không.</p></div>
+        <div id="mouse-hunt-list" class="mouse-hunt-list activity-cat-list"></div>
+      </section>
+      <section id="activity-panel-maze" class="activity-manager-panel hidden" role="tabpanel" aria-labelledby="activity-tab-maze">
+        <div class="activity-panel-heading"><h2>🌀 Khám phá mê cung</h2><p>Chuyến đi 1 giờ · nhặt xu, thức ăn và rương trên đường.</p></div>
+        <div id="maze-list" class="maze-list activity-cat-list"></div>
+      </section>
     </div>
   </div>
 
@@ -140,16 +156,6 @@
       <p class="stray-hunt-description">Đặt thức ăn làm mồi, chờ mèo hoang ghé qua. Mèo của bạn vẫn ở nhà và được chăm sóc bình thường.</p>
       <div id="stray-cat-hunt-content"></div>
       <button id="btn-stray-hunt-close" class="btn-secondary" style="width:100%;margin-top:14px;">Đóng</button>
-    </div>
-  </div>
-
-  <!-- MÊ CUNG -->
-  <div id="maze-modal" class="modal hidden">
-    <div class="modal-content maze-modal-content">
-      <h1>🌀 Mê cung mèo</h1>
-      <p class="maze-description">Thả một bé mèo vào mê cung rộng lớn. Bé sẽ tự tìm đường trong 1 giờ, nhặt thức ăn, xu và đôi khi tìm thấy rương. Về đích nhận thêm 300–500 xu!</p>
-      <div id="maze-list" class="maze-list"></div>
-      <button id="btn-maze-close" class="btn-secondary maze-close">Đóng</button>
     </div>
   </div>
 
@@ -295,6 +301,9 @@
           <button id="btn-maze" class="header-action" title="Mê cung mèo">
             <span class="header-action-icon" aria-hidden="true">🌀</span><span>Mê cung</span>
           </button>
+          <button id="btn-activity-manager" class="header-action" title="Quản lý hoạt động của mèo">
+            <span class="header-action-icon" aria-hidden="true">🐾</span><span>Quản lý</span>
+          </button>
           <button id="btn-farm" class="header-action" title="Trang trại vui chơi">
             <span class="header-action-icon" aria-hidden="true">🌿</span><span>Trang trại</span>
           </button>
@@ -358,6 +367,7 @@
   <script src="js/expedition.js"></script>
   <script src="js/mouse-hunt.js"></script>
   <script src="js/maze.js"></script>
+  <script src="js/activity-manager.js"></script>
   <script src="js/stray-hunt.js"></script>
   <script src="js/render.js"></script>
   <script src="js/features.js"></script>

@@ -85,9 +85,7 @@ function getMazeProgress(trip, now = Date.now()) {
 }
 
 function openMazeModal(selectedCatId = null) {
-  processMazeTrips();
-  renderMazeTrips(selectedCatId);
-  document.getElementById('maze-modal').classList.remove('hidden');
+  openActivityManager('maze', selectedCatId);
 }
 
 function renderMazeTrips(selectedCatId = null) {
@@ -128,7 +126,7 @@ function renderMazeTrips(selectedCatId = null) {
     }
 
     const selected = selectedCatId === cat.id ? ' maze-selected' : '';
-    return `<section class="maze-cat-item${selected}">
+    return `<section class="maze-cat-item activity-cat-card${selected}">
       <div class="maze-cat-name">${cat.name} · Lv${cat.level} · ${RARITY_LABEL[cat.rarity]}</div>
       ${content}
     </section>`;
@@ -140,6 +138,7 @@ function renderMazeTrips(selectedCatId = null) {
   list.querySelectorAll('[data-maze-claim]').forEach(button => {
     button.addEventListener('click', () => claimMazeTrip(button.dataset.mazeClaim));
   });
+  updateActivityManagerSummary();
 }
 
 async function confirmMazeTripStart(catId) {
@@ -225,8 +224,13 @@ function processMazeTrips() {
     }
   });
 
-  const modal = document.getElementById('maze-modal');
-  if (modal && !modal.classList.contains('hidden')) renderMazeTrips();
+  if (isActivityManagerOpen('maze')) {
+    const list = document.getElementById('maze-list');
+    const scrollTop = list.scrollTop;
+    renderMazeTrips();
+    list.scrollTop = scrollTop;
+  }
+  if (isActivityManagerOpen()) updateActivityManagerSummary();
   return changed;
 }
 

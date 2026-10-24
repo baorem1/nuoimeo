@@ -13,8 +13,12 @@ function render() {
   const sorted = [...state.cats].sort((a, b) => RARITY_ORDER[b.rarity] - RARITY_ORDER[a.rarity] || b.level - a.level);
   sorted.forEach(cat => renderCatCard(cat, list));
 
-  // Gắn sự kiện click cho các nút
-  list.querySelectorAll('[data-action]').forEach(el => {
+  list.querySelectorAll('.cat-card').forEach(bindCatCardActions);
+  checkAchievements();
+}
+
+function bindCatCardActions(card) {
+  card.querySelectorAll('[data-action]').forEach(el => {
     const action = el.dataset.action;
     const id = el.dataset.id;
     if (el.tagName === 'BUTTON') {
@@ -34,9 +38,7 @@ function render() {
           el.querySelector('.mobile-more-label').textContent = expanded ? 'Ẩn bớt' : 'Thêm';
         }
         if (action === 'mouse-hunt') {
-          const cat = state.cats.find(item => item.id === id);
-          if (cat?.mouseHunt) openMouseHuntModal();
-          else confirmMouseHuntStart(id);
+          openMouseHuntModal(id);
         }
         if (action === 'maze') openMazeModal(id);
       });
@@ -50,12 +52,46 @@ function render() {
       });
     }
   });
-  
+}
+
+function renderCatCardById(id) {
+  const cat = state.cats.find(item => item.id === id);
+  const list = document.getElementById('cat-list');
+  const currentCard = Array.from(list.querySelectorAll('.cat-card'))
+    .find(card => card.dataset.catId === id);
+  if (!cat || !currentCard) {
+    render();
+    return;
+  }
+
+  const replacementContainer = document.createDocumentFragment();
+  renderCatCard(cat, replacementContainer);
+  const replacementCard = replacementContainer.firstElementChild;
+  bindCatCardActions(replacementCard);
+  currentCard.replaceWith(replacementCard);
+  document.getElementById('money').textContent = Math.floor(state.money);
+  updateCareActionAvailability();
   checkAchievements();
+}
+
+function updateCareActionAvailability() {
+  document.querySelectorAll('#cat-list [data-action="feed"], #cat-list [data-action="drink"], #cat-list [data-action="bath"]').forEach(button => {
+    const cat = state.cats.find(item => item.id === button.dataset.id);
+    if (!cat) return;
+
+    const isAway = Boolean(cat.expedition || cat.mouseHunt || cat.mazeTrip);
+    const action = button.dataset.action;
+    button.disabled = isAway
+      || state.money < COSTS[action]
+      || action === 'feed' && cat.hunger >= 100
+      || action === 'drink' && cat.thirst >= 100
+      || action === 'bath' && cat.cleanliness >= 100;
+  });
 }
 
 function renderCatCard(cat, container) {
   const card = document.createElement('div');
+  card.dataset.catId = cat.id;
   const isMax = cat.level >= MAX_LEVEL;
   
   // --- TÍNH NĂNG TIẾN HÓA THẺ BÀI ---
@@ -220,6 +256,8 @@ function showLevelUpModal(cat) {
 
 // ============ EFFECTS ============
 function showHearts(x, y, emoji = '💕', count = 6) {
+  if (window.matchMedia('(max-width: 600px)').matches) return;
+
   const layer = document.getElementById('hearts-layer');
   for (let i = 0; i < count; i++) {
     const h = document.createElement('div');
@@ -234,6 +272,8 @@ function showHearts(x, y, emoji = '💕', count = 6) {
 }
 
 function showExpPopup(x, y, amount) {
+  if (window.matchMedia('(max-width: 600px)').matches) return;
+
   const layer = document.getElementById('hearts-layer');
   const p = document.createElement('div');
   p.className = 'exp-popup';
