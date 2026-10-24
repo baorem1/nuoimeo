@@ -217,9 +217,24 @@
 }
 
 @media (max-width: 420px) {
+  #tab-buy,
+  #tab-sell,
+  #tab-items {
+    min-height: 44px;
+    padding: 8px 5px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
   .random-cat-shop {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .random-cat-shop button,
+  .premium-cat-item button {
+    min-height: 44px;
+    flex-shrink: 0;
   }
 
   .premium-cat-stock {
@@ -234,5 +249,12 @@
   .premium-cat-item svg {
     width: 76px;
     height: 76px;
+  }
+}
+
+@media (max-width: 600px) {
+  .premium-cat-stock {
+    max-height: none;
+    overflow: visible;
   }
 }

@@ -28,8 +28,9 @@ function render() {
         if (action === 'expedition') openExpeditionModal(id);
         if (action === 'diary') openCatDiary(id);
         if (action === 'mouse-hunt') {
-          if (state.cats.find(cat => cat.id === id)?.mouseHunt) openMouseHuntModal();
-          else startMouseHunt(id);
+          const cat = state.cats.find(item => item.id === id);
+          if (cat?.mouseHunt) openMouseHuntModal();
+          else confirmMouseHuntStart(id);
         }
         if (action === 'maze') openMazeModal(id);
       });

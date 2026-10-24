@@ -596,3 +596,83 @@ footer { text-align: center; padding: 24px; }
     transform: none;
   }
 }
+
+@media (max-width: 600px) {
+  html {
+    scroll-padding-top: 150px;
+  }
+
+  body {
+    min-width: 320px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  main {
+    padding: 14px 12px 24px;
+  }
+
+  .cat-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .modal {
+    align-items: center;
+    padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+  }
+
+  .modal-content {
+    width: 100%;
+    max-height: min(88vh, 760px);
+    max-height: min(88dvh, 760px);
+    padding: 20px 16px;
+    border-radius: 22px;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-content h1 {
+    font-size: clamp(1.2rem, 5.5vw, 1.45rem);
+    line-height: 1.2;
+  }
+
+  .modal-content p {
+    font-size: 0.94rem;
+  }
+
+  .modal-content button,
+  .modal-content input,
+  .modal-content select {
+    min-height: 44px;
+  }
+
+  .breed-list,
+  .maze-list,
+  .mouse-hunt-list,
+  #achievement-list {
+    max-height: none !important;
+    overflow: visible;
+  }
+
+  .premium-cat-stock {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .header-action,
+  .daily-checkin {
+    touch-action: manipulation;
+  }
+}
+
+@media (max-width: 380px) {
+  .modal {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .modal-content {
+    padding: 18px 13px;
+    border-radius: 19px;
+  }
+}

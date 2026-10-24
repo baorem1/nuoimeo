@@ -6,6 +6,7 @@ const MOUSE_HUNT_IMAGES = [
   'img/batchuot/batchuot2.png',
   'img/batchuot/batchuot3.png'
 ];
+let mouseHuntConfirmationPending = false;
 
 function getMouseHuntReward(cat, miceCaught) {
   return scaleCoinsByRarity(miceCaught * MOUSE_HUNT_COIN_PER_MOUSE, cat.rarity);
@@ -60,11 +61,29 @@ function renderMouseHunts() {
   }).join('');
 
   list.querySelectorAll('[data-mouse-hunt-start]').forEach(button => {
-    button.addEventListener('click', () => startMouseHunt(button.dataset.mouseHuntStart));
+    button.addEventListener('click', () => confirmMouseHuntStart(button.dataset.mouseHuntStart));
   });
   list.querySelectorAll('[data-mouse-hunt-claim]').forEach(button => {
     button.addEventListener('click', () => claimMouseHunt(button.dataset.mouseHuntClaim));
   });
+}
+
+async function confirmMouseHuntStart(catId) {
+  if (mouseHuntConfirmationPending) return;
+  const cat = state.cats.find(item => item.id === catId);
+  if (!cat || cat.mouseHunt || cat.expedition || cat.mazeTrip || cat.inFarm) return;
+
+  mouseHuntConfirmationPending = true;
+  try {
+    const confirmed = await showCustomConfirm(
+      '🐭 Xác nhận chuyến bắt chuột',
+      `Cho bé <b>${cat.name}</b> (${RARITY_LABEL[cat.rarity]}) đi bắt chuột trong <b>30 phút</b>? Bé có thể bắt được xu hoặc về tay không.`,
+      false
+    );
+    if (confirmed) startMouseHunt(catId);
+  } finally {
+    mouseHuntConfirmationPending = false;
+  }
 }
 
 function startMouseHunt(catId) {
