@@ -1,3 +1,5 @@
+let mazeConfirmationPending = false;
+
 function generateCatMaze() {
   const size = CAT_MAZE_SIZE;
   const grid = Array(size * size).fill('#');
@@ -133,11 +135,29 @@ function renderMazeTrips(selectedCatId = null) {
   }).join('');
 
   list.querySelectorAll('[data-maze-start]').forEach(button => {
-    button.addEventListener('click', () => startMazeTrip(button.dataset.mazeStart));
+    button.addEventListener('click', () => confirmMazeTripStart(button.dataset.mazeStart));
   });
   list.querySelectorAll('[data-maze-claim]').forEach(button => {
     button.addEventListener('click', () => claimMazeTrip(button.dataset.mazeClaim));
   });
+}
+
+async function confirmMazeTripStart(catId) {
+  if (mazeConfirmationPending) return;
+  const cat = state.cats.find(item => item.id === catId);
+  if (!cat || cat.expedition || cat.mouseHunt || cat.mazeTrip || cat.inFarm) return;
+
+  mazeConfirmationPending = true;
+  try {
+    const confirmed = await showCustomConfirm(
+      '🌀 Xác nhận vào mê cung',
+      `Cho bé <b>${cat.name}</b> (${RARITY_LABEL[cat.rarity]}) vào mê cung trong <b>1 giờ</b>? Bé sẽ tự tìm đường và mang về xu, thức ăn hoặc rương.`,
+      false
+    );
+    if (confirmed) startMazeTrip(catId);
+  } finally {
+    mazeConfirmationPending = false;
+  }
 }
 
 function renderMazeMap(cat, trip, progress) {

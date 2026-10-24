@@ -92,3 +92,21 @@
     font-size: 0.78em;
   }
 }
+
+@media (max-width: 600px) {
+  .stray-hunt-illustration {
+    padding: 10px;
+    font-size: 38px;
+  }
+
+  .stray-hunt-portrait {
+    width: 132px;
+    height: 132px;
+  }
+
+  .stray-hunt-portrait img,
+  .stray-hunt-portrait svg {
+    width: 108px;
+    height: 108px;
+  }
+}

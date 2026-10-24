@@ -221,6 +221,11 @@
     font-size: 0.7em;
   }
 
+  .farm-cat-sprite {
+    width: clamp(44px, 12vw, 76px);
+    height: clamp(44px, 12vw, 76px);
+  }
+
   .farm-chat-bubble {
     top: -13px;
     right: 0;

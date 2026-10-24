@@ -1414,6 +1414,10 @@
 }
 
 @media (max-width: 600px) {
+  .cat-card .cat-portrait .cat-sleeping {
+    font-size: 36px;
+  }
+
   #inventory-list {
     display: flex;
     flex-direction: column;

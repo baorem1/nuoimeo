@@ -767,3 +767,34 @@ footer { text-align: center; padding: 24px; }
     text-align: center;
   }
 }
+
+@media (max-width: 600px) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .cat-card:hover,
+  .btn-primary:hover,
+  .btn-shop:hover,
+  .header-action:hover,
+  .daily-checkin:hover {
+    transform: none !important;
+  }
+
+  .breed-item-emoji {
+    font-size: 22px;
+  }
+
+  .result-cat svg {
+    width: 76px;
+    height: 76px;
+  }
+
+  .collection-item .rcount {
+    font-size: 1.15em;
+  }
+}

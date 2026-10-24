@@ -364,3 +364,20 @@
     height: 118px;
   }
 }
+
+@media (max-width: 600px) {
+  .cat-roll-icon {
+    font-size: 42px;
+  }
+
+  .cat-roll-portrait {
+    width: 118px;
+    height: 118px;
+  }
+
+  .cat-roll-portrait svg,
+  .cat-roll-portrait img {
+    width: 98px;
+    height: 98px;
+  }
+}
