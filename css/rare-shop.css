@@ -254,7 +254,113 @@
 
 @media (max-width: 600px) {
   .premium-cat-stock {
-    max-height: none;
-    overflow: visible;
+    max-height: min(40vh, 340px);
+    max-height: min(40dvh, 340px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #shop-modal .shop-tabs {
+    gap: 5px;
+    margin-bottom: 10px !important;
+  }
+
+  #tab-buy,
+  #tab-sell,
+  #tab-items {
+    min-width: 0;
+    min-height: 40px;
+    padding: 6px 3px;
+    font-size: 0.76rem;
+    white-space: normal;
+  }
+
+  .random-cat-shop {
+    gap: 7px;
+    padding: 9px;
+    border-radius: 12px;
+  }
+
+  .random-cat-shop-copy strong {
+    font-size: 0.88rem;
+  }
+
+  .random-cat-shop-copy span {
+    font-size: 0.75rem;
+  }
+
+  .random-cat-shop button,
+  .premium-cat-item button {
+    min-height: 38px !important;
+    padding: 7px;
+    font-size: 0.82rem;
+  }
+
+  .premium-shop-description {
+    margin: 9px 0 5px !important;
+    font-size: 0.78rem;
+    line-height: 1.3;
+  }
+
+  .premium-shop-countdown {
+    margin-bottom: 6px !important;
+    font-size: 0.8rem;
+  }
+
+  .premium-cat-stock {
+    gap: 7px;
+  }
+
+  .premium-cat-item {
+    padding: 8px 6px;
+    border-radius: 12px;
+  }
+
+  .premium-cat-item img,
+  .premium-cat-item svg,
+  .result-cat-portrait {
+    width: 60px;
+    height: 60px;
+  }
+
+  .premium-cat-name {
+    margin: 3px 0;
+    font-size: 0.88rem;
+  }
+
+  .premium-cat-rarity,
+  .premium-cat-trait {
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+  }
+
+  .premium-cat-price {
+    margin-bottom: 5px;
+    font-size: 0.84rem;
+  }
+
+  #bulk-sell-list,
+  #shop-items-list {
+    max-height: min(46vh, 380px) !important;
+    max-height: min(46dvh, 380px) !important;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cat-roll-reel {
+    min-height: 150px;
+  }
+
+  .cat-roll-portrait {
+    width: 140px;
+    height: 140px;
+  }
+
+  .cat-roll-portrait svg,
+  .cat-roll-portrait img {
+    width: 118px;
+    height: 118px;
   }
 }

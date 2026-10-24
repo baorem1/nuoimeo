@@ -1118,3 +1118,362 @@
     font-size: 0.85rem;
   }
 }
+
+@media (max-width: 600px) {
+  .cat-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 9px;
+  }
+
+  .cat-card {
+    min-width: 0;
+    padding: 8px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(74, 59, 82, 0.08);
+  }
+
+  .cat-card-top {
+    min-height: 23px;
+  }
+
+  .cat-card-top .rarity-badge,
+  .cat-level-chip {
+    min-height: 22px;
+    padding: 4px 6px;
+    font-size: 0.58rem;
+    letter-spacing: 0;
+  }
+
+  .cat-hero {
+    grid-template-columns: 54px minmax(0, 1fr);
+    gap: 6px;
+    margin: 5px 0 6px;
+  }
+
+  .cat-portrait {
+    width: 54px;
+    height: 58px;
+    border-radius: 11px;
+  }
+
+  .cat-portrait svg,
+  .cat-portrait .cat-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .cat-identity .cat-name {
+    margin-bottom: 2px;
+    font-size: 0.88rem;
+    line-height: 1.1;
+  }
+
+  .cat-identity .cat-meta,
+  .cat-card .portrait-hint,
+  .cat-equipment {
+    display: none;
+  }
+
+  .cat-identity .cat-stage {
+    display: none;
+  }
+
+  .cat-card.is-exploring .cat-identity .cat-stage,
+  .cat-card.is-mouse-hunting .cat-identity .cat-stage,
+  .cat-card.is-in-maze .cat-identity .cat-stage,
+  .cat-card.is-in-farm .cat-identity .cat-stage {
+    display: block;
+    margin-top: 3px;
+    color: #76556b;
+    font-size: 0.55rem;
+    line-height: 1.15;
+  }
+
+  .cat-identity .cat-trait {
+    max-width: 100%;
+    margin: 0;
+    padding: 3px 5px;
+    overflow: hidden;
+    font-size: 0.62rem;
+    letter-spacing: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cat-card .level-bar-wrap {
+    margin: 4px 0 5px;
+    padding: 5px 6px;
+    border-radius: 9px;
+  }
+
+  .cat-card .level-row {
+    margin-bottom: 3px;
+    font-size: 0.62rem;
+  }
+
+  .cat-card .level-title {
+    font-size: 0.64rem;
+  }
+
+  .cat-card .exp-text {
+    margin: 0;
+    font-size: 0.58rem;
+  }
+
+  .cat-card .exp-bar {
+    height: 5px;
+  }
+
+  .cat-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px 5px;
+    padding: 1px 0;
+  }
+
+  .cat-stats .stat {
+    gap: 4px;
+    min-width: 0;
+    margin: 0;
+    font-size: 0.62rem;
+  }
+
+  .cat-stats .stat-label {
+    display: flex;
+    width: 15px;
+    flex: 0 0 15px;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    font-size: 0;
+  }
+
+  .cat-stats .stat-icon {
+    font-size: 0.78rem;
+  }
+
+  .cat-stats .stat-name {
+    display: none;
+  }
+
+  .cat-stats .stat-bar {
+    height: 6px;
+  }
+
+  .cat-card .cat-action-panel {
+    gap: 4px;
+    margin-top: 4px;
+    padding-top: 5px;
+  }
+
+  .cat-card .cat-action-panel .cat-actions {
+    gap: 4px;
+  }
+
+  .cat-card .cat-care-actions button,
+  .cat-card .cat-market-actions button,
+  .cat-card .cat-extra-actions button {
+    display: inline-flex;
+    min-width: 0;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 4px;
+    border-radius: 9px;
+    font-size: 0.68rem;
+    line-height: 1;
+  }
+
+  .cat-card .cat-care-actions button {
+    font-size: 0.8rem;
+  }
+
+  .cat-card .cat-market-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 0;
+  }
+
+  .cat-card .cat-market-actions .btn-sell {
+    grid-column: auto;
+    padding: 4px;
+    font-size: 0.68rem;
+  }
+
+  .cat-card .mobile-action-icon {
+    font-size: 0.9rem;
+  }
+
+  .cat-card .cat-care-actions .mobile-action-label,
+  .cat-card .cat-market-actions .mobile-action-label {
+    display: none;
+  }
+
+  .cat-card .mobile-more-actions {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 3px 6px;
+    border: 1px solid #f0dce8;
+    border-radius: 9px;
+    background: #fff8fc;
+    color: #805b73;
+    font-size: 0.65rem;
+    font-weight: 750;
+    touch-action: manipulation;
+  }
+
+  .cat-card .mobile-more-actions > span:first-child {
+    font-size: 1rem;
+    line-height: 0.8;
+  }
+
+  .cat-card .cat-extra-actions {
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .cat-card.cat-card-actions-expanded .cat-extra-actions {
+    display: grid;
+  }
+
+  .cat-card .cat-extra-actions button {
+    min-height: 34px;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (min-width: 601px) {
+  .cat-card .mobile-more-actions {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) and (max-height: 740px) {
+  .cat-card {
+    padding: 6px;
+  }
+
+  .cat-hero {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 5px;
+    margin: 2px 0 3px;
+  }
+
+  .cat-portrait {
+    width: 46px;
+    height: 48px;
+  }
+
+  .cat-portrait svg,
+  .cat-portrait .cat-img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .cat-card .level-bar-wrap {
+    margin: 2px 0 3px;
+    padding: 3px 4px;
+  }
+
+  .cat-card .level-row {
+    margin-bottom: 0;
+  }
+
+  .cat-card .exp-bar {
+    display: none;
+  }
+
+  .cat-stats {
+    gap: 2px 4px;
+  }
+
+  .cat-stats .stat-bar {
+    height: 5px;
+  }
+
+  .cat-card .cat-action-panel {
+    gap: 2px;
+    margin-top: 2px;
+    padding-top: 3px;
+  }
+
+  .cat-card .cat-care-actions button,
+  .cat-card .cat-market-actions button,
+  .cat-card .cat-extra-actions button {
+    min-height: 30px;
+  }
+
+  .cat-card .mobile-more-actions {
+    min-height: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  #inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding-right: 2px;
+  }
+
+  .inventory-section-title {
+    margin: 5px 2px 0;
+    font-size: 0.9rem;
+  }
+
+  .inventory-item {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 7px;
+    padding: 8px;
+    border-radius: 11px;
+  }
+
+  .inventory-item-icon,
+  .inventory-relic-image,
+  .inventory-chest-image {
+    width: 36px;
+    height: 36px;
+    min-width: 0;
+    flex-basis: 36px;
+  }
+
+  .inventory-item-icon {
+    font-size: 1.2em;
+  }
+
+  .inventory-item-info {
+    flex: initial;
+    gap: 3px;
+    font-size: 0.86rem;
+  }
+
+  .inventory-item-info small,
+  .inventory-empty-cats {
+    font-size: 0.72em;
+    line-height: 1.25;
+  }
+
+  .inventory-item > button {
+    min-height: 38px !important;
+    margin-left: 0;
+    padding: 6px 9px;
+    font-size: 0.78em;
+  }
+
+  .inventory-cat-select {
+    min-height: 34px !important;
+    padding: 5px 7px;
+    font-size: 0.78em;
+  }
+
+  .inventory-equipped-row {
+    gap: 5px;
+  }
+}

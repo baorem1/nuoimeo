@@ -27,6 +27,12 @@ function render() {
         if (action === 'auction') startCatAuction(id);
         if (action === 'expedition') openExpeditionModal(id);
         if (action === 'diary') openCatDiary(id);
+        if (action === 'toggle-more') {
+          const card = el.closest('.cat-card');
+          const expanded = card.classList.toggle('cat-card-actions-expanded');
+          el.setAttribute('aria-expanded', String(expanded));
+          el.querySelector('.mobile-more-label').textContent = expanded ? 'Ẩn bớt' : 'Thêm';
+        }
         if (action === 'mouse-hunt') {
           const cat = state.cats.find(item => item.id === id);
           if (cat?.mouseHunt) openMouseHuntModal();
@@ -131,20 +137,21 @@ function renderCatCard(cat, container) {
 
     <div class="cat-action-panel">
       <div class="cat-actions cat-care-actions">
-        <button data-action="feed" data-id="${cat.id}" ${isAway || state.money < COSTS.feed || cat.hunger >= 100 ? 'disabled' : ''} title="Cho ăn (10 xu)" aria-label="Cho ${cat.name} ăn">🍖</button>
-        <button data-action="drink" data-id="${cat.id}" ${isAway || state.money < COSTS.drink || cat.thirst >= 100 ? 'disabled' : ''} title="Cho uống (5 xu)" aria-label="Cho ${cat.name} uống">💧</button>
-        <button data-action="bath" data-id="${cat.id}" ${isAway || state.money < COSTS.bath || cat.cleanliness >= 100 ? 'disabled' : ''} title="Tắm (15 xu)" aria-label="Tắm cho ${cat.name}">🛁</button>
+        <button data-action="feed" data-id="${cat.id}" ${isAway || state.money < COSTS.feed || cat.hunger >= 100 ? 'disabled' : ''} title="Cho ăn (10 xu)" aria-label="Cho ${cat.name} ăn"><span class="mobile-action-icon" aria-hidden="true">🍖</span><span class="mobile-action-label">Cho ăn</span></button>
+        <button data-action="drink" data-id="${cat.id}" ${isAway || state.money < COSTS.drink || cat.thirst >= 100 ? 'disabled' : ''} title="Cho uống (5 xu)" aria-label="Cho ${cat.name} uống"><span class="mobile-action-icon" aria-hidden="true">💧</span><span class="mobile-action-label">Cho uống</span></button>
+        <button data-action="bath" data-id="${cat.id}" ${isAway || state.money < COSTS.bath || cat.cleanliness >= 100 ? 'disabled' : ''} title="Tắm (15 xu)" aria-label="Tắm cho ${cat.name}"><span class="mobile-action-icon" aria-hidden="true">🛁</span><span class="mobile-action-label">Tắm</span></button>
       </div>
       <div class="cat-actions cat-market-actions">
-        <button class="btn-breed" data-action="breed" data-id="${cat.id}" ${!canBreedNow ? 'disabled' : ''}>💕 Ghép đôi</button>
-        <button class="btn-sell" data-action="sell" data-id="${cat.id}" ${isAway ? 'disabled' : ''}>💰 Bán · ${sellPrice} xu</button>
+        <button class="btn-breed" data-action="breed" data-id="${cat.id}" ${!canBreedNow ? 'disabled' : ''} aria-label="Ghép đôi ${cat.name}"><span class="mobile-action-icon" aria-hidden="true">💕</span><span class="mobile-action-label">Ghép đôi</span></button>
+        <button class="btn-sell" data-action="sell" data-id="${cat.id}" ${isAway ? 'disabled' : ''} title="Bán mèo nhận ${sellPrice} xu" aria-label="Bán ${cat.name} nhận ${sellPrice} xu"><span class="mobile-action-icon" aria-hidden="true">💰</span><span class="mobile-action-label">Bán · ${sellPrice} xu</span></button>
       </div>
+      <button class="mobile-more-actions" data-action="toggle-more" data-id="${cat.id}" aria-expanded="false" aria-label="Thêm thao tác cho ${cat.name}"><span aria-hidden="true">⋯</span><span class="mobile-more-label">Thêm thao tác</span></button>
       <div class="cat-actions cat-extra-actions">
-        ${!isExploring && !isInFarm && !isMouseHunting && !isInMaze ? `<button class="btn-secondary" data-action="expedition" data-id="${cat.id}">🧭 Đi thám hiểm</button>` : ''}
-        ${isMouseHunting || !isExploring && !isInFarm && !isInMaze ? `<button class="btn-secondary" data-action="mouse-hunt" data-id="${cat.id}">${isMouseHunting ? '🐭 Xem chuyến bắt chuột' : '🐭 Đi bắt chuột · 30 phút'}</button>` : ''}
-        ${isInMaze || !isExploring && !isInFarm && !isMouseHunting ? `<button class="btn-secondary" data-action="maze" data-id="${cat.id}">${isInMaze ? '🌀 Xem hành trình mê cung' : '🌀 Vào mê cung · 1 giờ'}</button>` : ''}
-        ${canAuction ? `<button class="btn-secondary" data-action="auction" data-id="${cat.id}">⚖️ Đưa lên đấu giá</button>` : ''}
-        <button class="btn-secondary" data-action="diary" data-id="${cat.id}">📔 Kỷ niệm · ${cat.badges?.length || 0} huy hiệu</button>
+      ${!isExploring && !isInFarm && !isMouseHunting && !isInMaze ? `<button class="btn-secondary" data-action="expedition" data-id="${cat.id}" aria-label="Đi thám hiểm"><span class="mobile-action-icon" aria-hidden="true">🧭</span><span class="mobile-action-label">Đi thám hiểm</span></button>` : ''}
+      ${isMouseHunting || !isExploring && !isInFarm && !isInMaze ? `<button class="btn-secondary" data-action="mouse-hunt" data-id="${cat.id}" aria-label="${isMouseHunting ? 'Xem chuyến bắt chuột' : 'Đi bắt chuột'}"><span class="mobile-action-icon" aria-hidden="true">🐭</span><span class="mobile-action-label">${isMouseHunting ? 'Xem chuyến bắt chuột' : 'Đi bắt chuột · 30 phút'}</span></button>` : ''}
+      ${isInMaze || !isExploring && !isInFarm && !isMouseHunting ? `<button class="btn-secondary" data-action="maze" data-id="${cat.id}" aria-label="${isInMaze ? 'Xem hành trình mê cung' : 'Vào mê cung'}"><span class="mobile-action-icon" aria-hidden="true">🌀</span><span class="mobile-action-label">${isInMaze ? 'Xem hành trình mê cung' : 'Vào mê cung · 1 giờ'}</span></button>` : ''}
+      ${canAuction ? `<button class="btn-secondary" data-action="auction" data-id="${cat.id}" aria-label="Đưa mèo lên đấu giá"><span class="mobile-action-icon" aria-hidden="true">⚖️</span><span class="mobile-action-label">Đưa lên đấu giá</span></button>` : ''}
+      <button class="btn-secondary" data-action="diary" data-id="${cat.id}" aria-label="Kỷ niệm của ${cat.name}"><span class="mobile-action-icon" aria-hidden="true">📔</span><span class="mobile-action-label">Kỷ niệm · ${cat.badges?.length || 0} huy hiệu</span></button>
       </div>
     </div>
   `;
@@ -153,9 +160,10 @@ function renderCatCard(cat, container) {
 }
 
 function renderStatBar(label, cls, value) {
+  const [icon, ...name] = Array.from(label);
   return `
     <div class="stat">
-      <span class="stat-label">${label}</span>
+      <span class="stat-label"><span class="stat-icon" aria-hidden="true">${icon}</span><span class="stat-name">${name.join('')}</span></span>
       <div class="stat-bar"><div class="stat-fill ${cls}" style="width:${value}%"></div></div>
     </div>
   `;
